@@ -2,11 +2,11 @@
     <div class="container text-center">
 
         <p class="mb-1">
-            Marisa Recipes · Planificador semanal de comidas
+            BMyHouse
         </p>
 
         <small>
-            Hecho con Laravel, Bootstrap y algo de hambre
+            Hecho por la carmen y el danie
         </small>
 
     </div>

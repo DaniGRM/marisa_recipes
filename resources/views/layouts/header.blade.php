@@ -2,7 +2,7 @@
     <div class="container">
 
         <a class="navbar-brand brand-title" href="/">
-            🍲 Marisa Recipes
+            BMyHouse
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
@@ -27,7 +27,20 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Lista compra</a>
                 </li>
-
+                @php
+                    $user = \App\Models\User::find(session('user_id'));
+                @endphp
+                @if($user)
+                <li class="nav-item ms-4">
+                    <form method="POST" action="{{ route('user.logout') }}">
+                        @csrf
+                        <button type="submit" class="p-0 border-0 bg-transparent text-light  mb-1" title="Cambiar usuario">
+                            {{ $user->name }}
+                            <i class="bi bi-box-arrow-right fs-5"></i>
+                        </button>
+                    </form>
+                </li>
+                @endif
             </ul>
 
         </div>

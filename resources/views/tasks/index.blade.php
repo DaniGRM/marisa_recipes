@@ -1,0 +1,261 @@
+@extends('layouts.app')
+
+@section('title', 'Tasks')
+
+@section('content')
+
+    <div class="top-actions">
+
+        <h2 class="mb-0">
+            Tareas
+        </h2>
+
+        <button class="btn btn-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+
+            + Nueva tarea
+
+        </button>
+
+    </div>
+
+    <div class="row g-4">
+
+        @foreach($tasks as $task)
+
+            <div class="col-12 col-md-6 col-lg-3">
+
+                <div class="card task-card h-100 shadow-sm border-0">
+
+                    <div class="card-body d-flex flex-column">
+
+                        {{-- HEADER --}}
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+
+                            <h5 class="fw-semibold mb-0">
+                                {{ $task->name }}
+                            </h5>
+
+                            <span class="badge badge-type-{{ $task->type }}">
+                                {{ $types[$task->type] }}
+                            </span>
+
+                        </div>
+
+                        {{-- DESCRIPTION --}}
+                        @if($task->description)
+                            <p class="fs-10 mb-3">
+                                {{ $task->description }}
+                            </p>
+                        @endif
+
+
+                        {{-- FREQUENCY --}}
+                        @if($task->schedule)
+
+                            <div class="task-frequency mb-3">
+
+                                <i class="bi bi-arrow-repeat me-1"></i>
+
+                                {{$task->schedule->times}}
+                                veces cada
+                                {{$task->schedule->every_n_units}}
+                                {{ $frequencies[$task->schedule->frequency] }}
+
+                            </div>
+
+                        @endif
+
+
+                        {{-- FOOTER --}}
+                        <div class="mt-auto d-flex justify-content-end">
+
+                            <div class="task-points">
+
+                                ⭐ {{ $task->points }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+    {{-- MODAL CREAR --}}
+
+    <div class="modal fade" id="createTaskModal">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+
+                <div class="modal-header border-0">
+
+                    <h5>Nueva tarea</h5>
+
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <form method="POST" action="{{route('tasks.store')}}">
+
+                    @csrf
+
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Nombre
+
+                            </label>
+
+                            <input name="name" class="form-control">
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Descripción
+
+                            </label>
+
+                            <textarea name="description" class="form-control"></textarea>
+
+                        </div>
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Puntos
+                            </label>
+
+                            <input type="number" name="points" class="form-control" min="1" value="1">
+
+                            <div class="form-text">
+                                Valor de completar la tarea
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Tipo
+
+                            </label>
+
+                            <select name="type" class="form-select" id="typeSelect">
+
+                                @foreach($types as $id => $type)
+
+                                    <option value="{{$id}}">
+
+                                        {{$type}}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                        <div id="scheduleFields" style="display:none">
+
+                            <label class="form-label mb-3">
+                                Frecuencia
+                            </label>
+
+                            <div class="frequency-builder d-flex align-items-center gap-2 flex-wrap">
+
+                                <span>Repetir</span>
+
+                                <input type="number" name="times" class="form-control text-center" style="width:80px"
+                                    value="1" min="1">
+
+                                <span>veces cada</span>
+
+                                <input type="number" name="every_n_units" class="form-control text-center"
+                                    style="width:80px" value="1" min="1">
+
+                                <select name="frequency" class="form-select" style="width:150px">
+
+                                    @foreach($frequencies as $id => $frequency)
+                                        <option value="{{$id}}">
+                                            {{$frequency}}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer border-0">
+
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button class="btn btn-dark rounded-pill px-4">
+
+                            Guardar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+@endsection
+
+@push('scripts')
+
+    <script>
+
+        $('#typeSelect').on('change', function () {
+
+            if ($(this).val() === 'frequency') {
+                $('#scheduleFields').show();
+            } else {
+                $('#scheduleFields').hide();
+            }
+
+        });
+
+        $('.frequency-builder input[name="times"]').on('input', function () {
+
+            let val = parseInt($(this).val())
+
+            if (val === 1) {
+                $(this).nextAll('span').first().text('vez cada')
+            } else {
+                $(this).nextAll('span').first().text('veces cada')
+            }
+
+        })
+
+    </script>
+
+@endpush

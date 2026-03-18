@@ -183,7 +183,7 @@
         }
 
         .task-frequency {
-            background: #f8fafc!important;
+            background: #f8fafc !important;
             color: #000;
             padding: 6px 10px;
             border-radius: 8px;
@@ -198,6 +198,47 @@
             font-weight: 600;
             font-size: .9rem;
             color: #111;
+        }
+        .today-panel{
+
+        }
+        .today-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .today-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: .2s;
+        }
+
+        .today-item.completed {
+            opacity: .5;
+            text-decoration: line-through;
+        }
+
+        .check-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 15%;
+            border: none;
+            background: #111;
+            color: white;
+            font-weight: bold;
+        }
+
+        .points-box {
+            background: linear-gradient(135deg, #fde68a, #facc15);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
         }
     </style>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserSelectController extends Controller
 {
@@ -17,16 +18,13 @@ class UserSelectController extends Controller
     public function login(Request $request)
     {
         $user = User::findOrFail($request->user_id);
-
-        session(['user_id' => $user->id]);
-
+        Auth::login($user);
         return redirect('/');
     }
 
     public function logout()
     {
-        session()->forget('user_id');
-
+        Auth::logout();
         return redirect()->route('user.select');
     }
 }

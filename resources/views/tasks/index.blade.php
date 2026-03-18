@@ -71,7 +71,7 @@
 
                             <div class="task-points">
 
-                                ⭐ {{ $task->points }}
+                                {{ $task->points }}⭐ 
 
                             </div>
 

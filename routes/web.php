@@ -12,7 +12,7 @@ Route::get('/select-user', [UserSelectController::class, 'index'])->name('user.s
 Route::post('/select-user', [UserSelectController::class, 'login'])->name('user.login');
 Route::post('/logout', [UserSelectController::class, 'logout'])->name('user.logout');
 
-Route::middleware('user.selected')->group(function () {
+Route::middleware(['system.bmo','user.selected'])->group(function () {
     Route::get('/', [MainController::class, 'index'])
         ->name('welcome');
 
@@ -36,4 +36,13 @@ Route::middleware('user.selected')->group(function () {
     Route::get('/today', [TaskInstanceController::class,'today'])->name('tasks.today');
     Route::post('/tasks/{task}/complete', [TaskInstanceController::class,'complete'])->name('tasks.complete');
     Route::post('/tasks/{task}/complete-common', [TaskInstanceController::class,'completeCommon'])->name('tasks.complete-cpmmon');
+
+});
+Route::prefix('bmo')->name('bmo.')->group(function () {
+
+    Route::get('/', [TaskInstanceController::class,'todayBmo'])->name('bmo');
+
+    Route::post('/tasks/{task}/complete', [TaskInstanceController::class,'complete'])
+        ->name('tasks.complete');
+
 });

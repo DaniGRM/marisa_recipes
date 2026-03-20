@@ -13,11 +13,11 @@
             </div>
 
         </div>
-        <div class="row">
+        <div class="row d-flex flex-row align-items-center">
             @foreach($commonTasks as $commonTask)
-                <form id="commonForm{{$commonTask->id}}" class="col-4 text-end" method="POST" action="{{ route('tasks.complet', $commonTask->id) }}"></form>
 
-                <div class="col-12 col-md-6 col-lg-3" style="cursor:pointer" onclick="$('#commonForm{{ $commonTask->id }}').submit()">
+                <div class="col-12 col-md-6 col-lg-3" style="cursor:pointer">
+                    <form id="commonForm{{$commonTask->id}}" class="col-4 text-end" method="POST" action="{{ route('tasks.complete', $commonTask->id) }}"></form>
 
                     <div class="card task-card h-100 shadow-sm border-0">
 

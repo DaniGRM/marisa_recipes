@@ -19,9 +19,9 @@
 
                 <button class="card recipe-card w-100 p-4 text-center border-0">
                     @if($user->id == 1)
-                        <img src="bmo.png">
+                        <img src="bmo.png" class="w-100">
                     @else
-                        <img src="bma.png">
+                        <img src="bma.png" class="w-100">
                     @endif
                     <span class="mt-2 fs-8">{{$user->name}}</span>
 

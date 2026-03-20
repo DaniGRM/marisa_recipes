@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'user.selected' => \App\Http\Middleware\EnsureUserSelected::class,
+            'system.bmo' => \App\Http\Middleware\CheckIfBMO::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

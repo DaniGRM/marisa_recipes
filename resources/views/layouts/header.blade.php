@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm ">
     <div class="container">
 
         <a class="navbar-brand brand-title" href="/">
@@ -28,7 +28,7 @@
                     <a class="nav-link" href="#">Lista compra</a>
                 </li>
                 @php
-                    $user = \App\Models\User::find(session('user_id'));
+                    $user = \Illuminate\Support\Facades\Auth::user();
                 @endphp
                 @if($user)
                 <li class="nav-item ms-4">

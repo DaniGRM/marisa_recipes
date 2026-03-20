@@ -19,6 +19,46 @@ class TaskInstance extends Model
         'completed_at' => 'datetime'
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($taskInstance) {
+
+            // Solo si se marca como completed
+            if ($taskInstance->status !== 'completed') {
+                return;
+            }
+
+            // 🔴 CLAVE: evitar duplicados
+            // Si ya estaba completada antes, no sumar otra vez
+            if ($taskInstance->exists) {
+                $originalStatus = $taskInstance->getOriginal('status');
+
+                if ($originalStatus === 'completed') {
+                    return;
+                }
+            }
+
+            // Necesitamos usuario y tarea
+            if (!$taskInstance->completed_by) {
+                return;
+            }
+
+            $task = $taskInstance->task;
+
+            if (!$task) {
+                return;
+            }
+
+            $user = \App\Models\User::find($taskInstance->completed_by);
+
+            if (!$user) {
+                return;
+            }
+
+            // Sumar puntos
+            $user->increment('points', $task->points);
+        });
+    }
     public function task()
     {
         return $this->belongsTo(Task::class);

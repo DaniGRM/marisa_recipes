@@ -10,7 +10,7 @@
             <i class="bi bi-list-check"></i>
         </div>
 
-        <div class="icon" data-view="common-tasks">
+        <div class="icon mx-4" data-view="common-tasks">
             <i class="bi bi-lightning"></i>
         </div>
 

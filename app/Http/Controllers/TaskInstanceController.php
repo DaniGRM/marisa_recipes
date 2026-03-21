@@ -18,6 +18,7 @@ class TaskInstanceController extends Controller
 
         $tasks = TaskInstance::with('task')
             ->where('date', $today)
+            ->whereDate('completed_at', $today)
             ->get();
 
         $commonTasks = Task::where('type', 'common')->get();
@@ -32,7 +33,6 @@ class TaskInstanceController extends Controller
     public function complete(Request $request, Task $task)
     {
         $instance = TaskInstance::where('task_id',$task->id)
-            ->whereDate('date', now())
             ->where('status','pending')
             ->first();
         if(isset($request['user'])){
@@ -52,7 +52,7 @@ class TaskInstanceController extends Controller
         }else{
 
             // Para tareas "common" (shortcut)
-            TaskInstance::create([
+            $instance =TaskInstance::create([
                 'task_id'=>$task->id,
                 'date'=>now(),
                 'status'=>'completed',
@@ -62,7 +62,7 @@ class TaskInstanceController extends Controller
 
         }
 
-        return back()->with('user' ,$userId);
+        return back()->with('user' ,$userId)->with('task_completed', $instance);
     }
 
     public function todayBmo()
@@ -72,11 +72,16 @@ class TaskInstanceController extends Controller
         if($sessionUser){
             $currentUser = $sessionUser;
         }
+        $taskCompleted = session('task_completed');
+        if($taskCompleted){
+            session()->forget('task_completed');
+        }
         $users = User::whereIn('id', [1,2])->get();
         $today = now()->toDateString();
 
         $tasks = TaskInstance::with('task')
             ->where('date', $today)
+            ->orWhereDate('completed_at', $today)
             ->orWhere('status','pending')
             ->orderBy('status', 'asc')
             ->get();
@@ -85,7 +90,7 @@ class TaskInstanceController extends Controller
             ->where('status','completed')
             ->sum(fn($t) => $t->task->points);
 
-        return view('bmo.index', compact('tasks','totalPoints', 'users', 'currentUser', 'commonTasks'));
+        return view('bmo.index', compact('tasks','totalPoints', 'users', 'currentUser', 'commonTasks', 'taskCompleted'));
     }
 
 }

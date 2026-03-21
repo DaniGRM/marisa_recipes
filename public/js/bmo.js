@@ -1,6 +1,8 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-
+    if (taskCompleted) {
+        showTaskCompleted();
+    }
     const video = document.getElementById('bmoVideo');
 
     // Esperar a que el vídeo tenga datos suficientes
@@ -19,6 +21,7 @@ const user_select = document.getElementById('user-select');
 
 function activarApp() {
     screensaver.style.display = 'none';
+    
     user_select.style.display = 'flex';
 }
 
@@ -57,7 +60,7 @@ function completeTask(taskId) {
 
 function completeCommonTask(taskId) {
     const user = document.getElementById('user' + taskId);
-    const form = document.getElementById('formTask' + taskId);
+    const form = document.getElementById('formCommonTask' + taskId);
     user.value = selectedUser;
     form.submit();
 }
@@ -75,13 +78,16 @@ function showView(viewName) {
         view.style.display = 'block';
     }
     anime({
-        targets: '.'+viewName,
-        translateY: [40, 0],
+        targets: ['#view-' + viewName + ' .task', '#view-' + viewName + ' .common-task'], // o .today-item
+        
+        translateY: [30, 0],
         opacity: [0, 1],
         scale: [0.95, 1],
-        delay: anime.stagger(120),
-        easing: 'easeOutElastic(1, .3 )',
-        duration: 700
+
+        delay: anime.stagger(240), // clave → uno detrás de otro
+
+        easing: 'easeOutCubic',
+        duration: 400
     });
 
 }
@@ -100,3 +106,27 @@ document.querySelectorAll('.icon[data-view]').forEach(icon => {
     });
 
 });
+
+function showTaskCompleted() {
+
+    const overlay = document.getElementById('task-completed');
+    const imageScreen = document.getElementById('bmo-image-screen');
+    const textScreen = document.getElementById('bmo-text-screen');
+
+    overlay.style.display = 'flex';
+
+    // Mostrar imagen primero
+    imageScreen.classList.add('active');
+    textScreen.classList.remove('active');
+
+    // Después de 2s → texto
+    setTimeout(() => {
+        imageScreen.classList.remove('active');
+        textScreen.classList.add('active');
+    }, 3000);
+
+    // Después de 5s → volver a app
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 6000);
+}

@@ -28,8 +28,10 @@
         </div>
     </div>
     @include('bmo.user-select')
+    @include('bmo.task-completed')
 </body>
 <script>
+    let taskCompleted = @json($taskCompleted ?? null);
     let selectedUser = '{{$currentUser }}';
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>

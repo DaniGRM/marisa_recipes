@@ -6,7 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* cursor: none;     */
+    cursor: none;    
 }
 
 .screen {
@@ -60,6 +60,7 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 23%;
+    cursor: pointer;
 }
 .task.completed {
     opacity: 0.5;
@@ -169,4 +170,39 @@ body {
 .icon.active{
     background:#ffd60a;
     color:#111;
+}
+.bmo-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#8bd3a6;
+    z-index:9999;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.bmo-screen{
+    width:100%;
+    height:100%;
+    display:none;
+}
+
+.bmo-screen.active{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.bmo-message{
+    color:black;
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size: 3rem;
+}
+
+.bmo-message h1{
+    margin-bottom:20px;
 }

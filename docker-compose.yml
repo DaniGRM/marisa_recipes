@@ -1,29 +1,15 @@
-version: '3.8'
-
 services:
   app:
+    image: arm32v7/php:8.2-fpm
+    container_name: marisa_app
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: marisa_app
-    ports:
-      - "9000:9000"
     depends_on:
       - db
 
-  web:
-    image: nginx:alpine
-    container_name: marisa_web
-    ports:
-      - "8080:80"
-    volumes:
-      - .:/var/www
-      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
-
   db:
-    image: mariadb:10.6
+    image: arm32v7/mariadb:10.6
     container_name: marisa_db
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -31,16 +17,15 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - db_data:/var/lib/mysql  # <--- este es el volumen persistente
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: marisa_phpmyadmin
-    environment:
-      PMA_HOST: db       # nombre del servicio de la base de datos
-      MYSQL_ROOT_PASSWORD: root
+      - db_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    container_name: marisa_adminer
     ports:
-      - "8081:80"        # accederás desde el navegador a http://<IP>:8081
+      - "8081:8080"
     depends_on:
       - db
+
 volumes:
   db_data:

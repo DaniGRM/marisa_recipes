@@ -60,7 +60,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN git config --global url."https://github.com/".insteadOf git@github.com:
 
-COPY . /var/www
+#COPY . /var/www
 COPY --from=composer:2.6 /usr/bin/composer /usr/local/bin/composer
 
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader

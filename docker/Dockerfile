@@ -63,7 +63,7 @@ RUN git config --global url."https://github.com/".insteadOf git@github.com:
 #COPY . /var/www
 COPY --from=composer:2.6 /usr/bin/composer /usr/local/bin/composer
 
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+# RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
 RUN mkdir -p storage bootstrap/cache && chmod -R 777 storage bootstrap/cache
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\TaskSchedule;
 use Illuminate\Http\Request;
+use App\Models\Room;
 
 class TaskController extends Controller
 {
@@ -24,18 +25,24 @@ class TaskController extends Controller
             'weekly' => 'Semana(s)',
             'monthly' => 'Mes(es)'
         ];
-
-        return view('tasks.index', compact('tasks','types','frequencies'));
+        $rooms = Room::pluck('name');
+        return view('tasks.index', compact('tasks','types','frequencies', 'rooms'));
     }
 
     public function store(Request $request)
     {
+        $roomInput = ucfirst(strtolower(trim($request->room)));
 
+        // Buscar o crear
+        $room = Room::firstOrCreate([
+            'name' => trim($roomInput)
+        ]);
         $task = Task::create([
             'name' => $request->name,
             'description' => $request->description,
             'type' => $request->type,
-            'points' => $request->points
+            'points' => $request->points,
+            'room_id' => $room->id,
         ]);
 
         if($request->type === 'frequency'){
@@ -56,12 +63,18 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
+        $roomInput = ucfirst(strtolower(trim($request->room)));
+
+        $room = Room::firstOrCreate([
+            'name' => $roomInput
+        ]);
 
         $task->update([
             'name'=>$request->name,
             'description'=>$request->description,
             'type'=>$request->type,
-            'points' => $request->points
+            'points' => $request->points,
+            'room_id' => $room->id,
         ]);
 
         if($task->type === 'frequency'){

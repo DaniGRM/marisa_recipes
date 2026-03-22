@@ -79,6 +79,12 @@
                             </div>
 
                         </div>
+                        @if($task->room)
+                            <div class="task-room text-white mb-2">
+                                <i class="bi bi-house-door me-1" style="font-size: 20px;"></i>
+                                {{ $task->room->name }}
+                            </div>
+                        @endif
 
                     </div>
 
@@ -172,6 +178,20 @@
 
                             </select>
 
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Habitación</label>
+
+                            <select name="room"
+                                    id="roomSelect"
+                                    class="form-select"
+                                    required>
+
+                                @foreach($rooms as $room)
+                                    <option value="{{ $room }}">{{ $room }}</option>
+                                @endforeach
+
+                            </select>
                         </div>
 
                         <div id="scheduleFields" style="display:none">
@@ -295,6 +315,13 @@
 
         $('.task-card button').on('click', function(e){
             e.stopPropagation();
+        });
+
+        $('#roomSelect').select2({
+            tags: true,
+            placeholder: "Seleccionar o crear habitación",
+            width: '100%',
+            dropdownParent: $('#createTaskModal'),
         });
     </script>
 

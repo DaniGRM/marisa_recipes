@@ -10,7 +10,8 @@ class Task extends Model
         'name',
         'description',
         'type',
-        'points'
+        'points',
+        'room_id'
     ];
 
     public function schedule()
@@ -21,5 +22,10 @@ class Task extends Model
     public function instances()
     {
         return $this->hasMany(TaskInstance::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
     }
 }

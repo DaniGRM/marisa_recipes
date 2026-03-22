@@ -26,8 +26,17 @@ function activarApp() {
 }
 
 // Detecta toque o click
-screensaver.addEventListener('click', activarApp);
-screensaver.addEventListener('touchstart', activarApp);
+screensaver.addEventListener('click', function(e) {
+    e.stopPropagation(); // evita que el click se propague a elementos debajo
+    e.preventDefault();  // evita acciones por defecto si hubiera
+    activarApp();
+});
+
+screensaver.addEventListener('touchstart', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    activarApp();
+});
 
 let timeout;
 
@@ -39,8 +48,16 @@ function resetTimer() {
     }, 60000); // 60 segundos
 }
 
-document.addEventListener('click', resetTimer);
-document.addEventListener('touchstart', resetTimer);
+document.addEventListener('click', function(e){
+    if(!screensaver.contains(e.target)){
+        resetTimer();
+    }
+});
+document.addEventListener('touchstart', function(e){
+    if(!screensaver.contains(e.target)){
+        resetTimer();
+    }
+});
 
 resetTimer();
 

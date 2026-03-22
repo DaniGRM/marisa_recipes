@@ -18,7 +18,7 @@
             </p>
 
             <p>
-                Puntos obtenidos: 
+                Puntos obtenidos:
                 <strong>{{ $taskCompleted->task->points ?? 0 }}</strong> puntos
             </p>
 
@@ -27,3 +27,12 @@
     </div>
 
 </div>
+<canvas id="confetti-canvas" style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+"></canvas>

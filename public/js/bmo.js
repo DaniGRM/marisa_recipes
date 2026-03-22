@@ -1,8 +1,12 @@
-
+const myConfetti = confetti.create(
+    document.getElementById('confetti-canvas'),
+    { resize: true }
+);
 document.addEventListener("DOMContentLoaded", function () {
     if (taskCompleted) {
         showTaskCompleted();
     }
+    
     const video = document.getElementById('bmoVideo');
 
     // Esperar a que el vídeo tenga datos suficientes
@@ -132,6 +136,7 @@ function showTaskCompleted() {
 
     overlay.style.display = 'flex';
 
+    
     // Mostrar imagen primero
     imageScreen.classList.add('active');
     textScreen.classList.remove('active');
@@ -139,11 +144,43 @@ function showTaskCompleted() {
     // Después de 2s → texto
     setTimeout(() => {
         imageScreen.classList.remove('active');
+         // 🎉 Lanzar confetti al inicio
+        launchConfetti();
         textScreen.classList.add('active');
+        
     }, 3000);
-
+   
     // Después de 5s → volver a app
     setTimeout(() => {
         overlay.style.display = 'none';
     }, 6000);
+}
+
+
+function launchConfetti() {
+
+    const duration = 2000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+
+        myConfetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 }
+        });
+
+        myConfetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 }
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+
+    })();
 }

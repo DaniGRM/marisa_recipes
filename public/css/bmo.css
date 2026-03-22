@@ -63,7 +63,7 @@ body {
     cursor: pointer;
 }
 .task.completed {
-    opacity: 0.5;
+    opacity: 0.5!important;
     text-decoration: line-through;
 }
 

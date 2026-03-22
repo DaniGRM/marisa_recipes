@@ -35,5 +35,6 @@
     let selectedUser = '{{$currentUser }}';
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="{{ asset('js/bmo.js') }}"></script>
 </html>

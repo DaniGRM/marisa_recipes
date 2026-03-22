@@ -24,7 +24,10 @@
 
             <div class="col-12 col-md-6 col-lg-3">
 
-                <div class="card task-card h-100 shadow-sm border-0">
+                <div class="card task-card h-100 shadow-sm border-0" data-id="{{ $task->id }}" data-name="{{ $task->name }}"
+                    data-description="{{ $task->description }}" data-points="{{ $task->points }}" data-type="{{ $task->type }}"
+                    data-times="{{ $task->schedule->times ?? '' }}" data-every="{{ $task->schedule->every_n_units ?? '' }}"
+                    data-frequency="{{ $task->schedule->frequency ?? '' }}">
 
                     <div class="card-body d-flex flex-column">
 
@@ -71,7 +74,7 @@
 
                             <div class="task-points">
 
-                                {{ $task->points }}⭐ 
+                                {{ $task->points }}⭐
 
                             </div>
 
@@ -103,9 +106,10 @@
 
                 </div>
 
-                <form method="POST" action="{{route('tasks.store')}}">
+                <form method="POST" action="{{route('tasks.store')}}" id="taskForm">
 
                     @csrf
+                    <input type="hidden" name="_method" id="formMethod" value="POST">
 
                     <div class="modal-body">
 
@@ -117,7 +121,7 @@
 
                             </label>
 
-                            <input name="name" class="form-control">
+                            <input name="name" class="form-control" id="taskName">
 
                         </div>
 
@@ -129,7 +133,7 @@
 
                             </label>
 
-                            <textarea name="description" class="form-control"></textarea>
+                            <textarea name="description" class="form-control" id="taskDescription"></textarea>
 
                         </div>
                         <div class="mb-3">
@@ -138,7 +142,7 @@
                                 Puntos
                             </label>
 
-                            <input type="number" name="points" class="form-control" min="1" value="1">
+                            <input type="number" name="points" class="form-control" min="1" value="1" id="taskPoints">
 
                             <div class="form-text">
                                 Valor de completar la tarea
@@ -154,7 +158,7 @@
 
                             </label>
 
-                            <select name="type" class="form-select" id="typeSelect">
+                            <select name="type" class="form-select" id="typeSelect" >
 
                                 @foreach($types as $id => $type)
 
@@ -181,14 +185,14 @@
                                 <span>Repetir</span>
 
                                 <input type="number" name="times" class="form-control text-center" style="width:80px"
-                                    value="1" min="1">
+                                    value="1" min="1" id="taskTimes">
 
                                 <span>veces cada</span>
 
                                 <input type="number" name="every_n_units" class="form-control text-center"
-                                    style="width:80px" value="1" min="1">
+                                    style="width:80px" value="1" min="1" id="taskEvery" >
 
-                                <select name="frequency" class="form-select" style="width:150px">
+                                <select name="frequency" class="form-select" style="width:150px" id="taskFrequency">
 
                                     @foreach($frequencies as $id => $frequency)
                                         <option value="{{$id}}">
@@ -254,8 +258,44 @@
                 $(this).nextAll('span').first().text('veces cada')
             }
 
-        })
+        });
 
+        $('.task-card').on('click', function () {
+
+            const modal = $('#createTaskModal');
+
+            // Cambiar acción del form
+            const id = $(this).data('id');
+            $('#taskForm').attr('action', '/tasks/' + id);
+            $('#formMethod').val('PUT');
+
+            // Rellenar campos
+            $('#taskName').val($(this).data('name'));
+            $('#taskDescription').val($(this).data('description'));
+            $('#taskPoints').val($(this).data('points'));
+            $('#typeSelect').val($(this).data('type')).trigger('change');
+
+            // Frecuencia
+            $('#taskTimes').val($(this).data('times'));
+            $('#taskEvery').val($(this).data('every'));
+            $('#taskFrequency').val($(this).data('frequency'));
+
+            // Mostrar modal
+            modal.modal('show');
+        });
+        $('#createTaskModal').on('hidden.bs.modal', function () {
+
+            $('#taskForm').attr('action', '{{ route("tasks.store") }}');
+            $('#formMethod').val('POST');
+
+            $('#taskForm')[0].reset();
+            $('#scheduleFields').hide();
+
+        });
+
+        $('.task-card button').on('click', function(e){
+            e.stopPropagation();
+        });
     </script>
 
 @endpush

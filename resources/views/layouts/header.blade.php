@@ -13,6 +13,12 @@
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->is('tasks*') ? 'active' : '' }}" href="/tasks">
+                        Tareas
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link {{ request()->is('weekly-plans*') ? 'active' : '' }}" href="/weekly-plans">
                         Planes semanales
                     </a>

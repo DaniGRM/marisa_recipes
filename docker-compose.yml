@@ -8,6 +8,8 @@ services:
     container_name: marisa_app
     ports:
       - "9000:9000"
+    volumes:
+      - .:/var/www   # 👈 CLAVE
     depends_on:
       - db
 
@@ -23,7 +25,7 @@ services:
       - app
 
   db:
-    image: mariadb:10.6
+    image: tobi312/rpi-mariadb:10.6-alpine
     container_name: marisa_db
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -32,15 +34,12 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: marisa_phpmyadmin
-    environment:
-      PMA_HOST: db       # nombre del servicio de la base de datos
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "8081:80"        # accederás desde el navegador a http://<IP>:8081
-    depends_on:
-      - db
+  adminer:
+      image: adminer
+      container_name: marisa_adminer
+      ports:
+        - "8081:8080"
+      depends_on:
+        - db
 volumes:
   db_data:

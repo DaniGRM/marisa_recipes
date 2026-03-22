@@ -1,7 +1,7 @@
 <div class="header">
 
     <div class="title">
-        HOY2
+        HOY
     </div>
 
     <div class="nav-icons">

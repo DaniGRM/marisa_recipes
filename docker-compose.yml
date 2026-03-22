@@ -8,8 +8,6 @@ services:
     container_name: marisa_app
     ports:
       - "9000:9000"
-    volumes:
-      - .:/var/www   # 👈 CLAVE
     depends_on:
       - db
 

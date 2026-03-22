@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    restart: unless-stopped
     container_name: marisa_app
     volumes:
       - ~/projects/marisa_recipes:/var/www
@@ -15,6 +16,7 @@ services:
 
   web:
     image: nginx:alpine
+    restart: unless-stopped
     container_name: marisa_web
     ports:
       - "8080:80"
@@ -26,6 +28,7 @@ services:
 
   db:
     image: tobi312/rpi-mariadb:10.6-alpine
+    restart: unless-stopped
     container_name: marisa_db
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -36,6 +39,7 @@ services:
       - db_data:/var/lib/mysql
   adminer:
       image: adminer
+      restart: unless-stopped
       container_name: marisa_adminer
       ports:
         - "8081:8080"

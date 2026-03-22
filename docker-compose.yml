@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     container_name: marisa_app
+    volumes:
+      - /home/pi/projects/marisa_recipes:/var/www
     ports:
       - "9000:9000"
     depends_on:

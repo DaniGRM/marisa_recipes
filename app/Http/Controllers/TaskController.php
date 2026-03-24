@@ -12,7 +12,7 @@ class TaskController extends Controller
 
     public function index()
     {
-        $tasks = Task::with('schedule')->get();
+        $tasks = Task::with(['linkedTasks.linkedTasks'])->with('schedule')->get();
 
         $types = [
             'common' => 'Común',
@@ -37,14 +37,22 @@ class TaskController extends Controller
         $room = Room::firstOrCreate([
             'name' => trim($roomInput)
         ]);
+
+        $linkedTaskId = $request->linked_task_id;
+
+        $type = $linkedTaskId ? 'linked' : $request->type;
         $task = Task::create([
             'name' => $request->name,
             'description' => $request->description,
-            'type' => $request->type,
+            'type' => $type,
             'points' => $request->points,
             'room_id' => $room->id,
         ]);
 
+        if($linkedTaskId){
+            $task->linked_task_id = $linkedTaskId;
+        }
+        $task->save();
         if($request->type === 'frequency'){
 
             TaskSchedule::create([
@@ -72,7 +80,7 @@ class TaskController extends Controller
         $task->update([
             'name'=>$request->name,
             'description'=>$request->description,
-            'type'=>$request->type,
+            'type'=>$task->linked_task_id ? 'linked' : $request->type,
             'points' => $request->points,
             'room_id' => $room->id,
         ]);

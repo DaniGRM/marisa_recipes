@@ -10,7 +10,8 @@
             Tareas
         </h2>
 
-        <button class="btn btn-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+        <button class="btn btn-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#createTaskModal"
+            id="#createTaskModalBtn">
 
             + Nueva tarea
 
@@ -21,73 +22,76 @@
     <div class="row g-4">
 
         @foreach($tasks as $task)
-
+            @if($task->type == 'linked')
+                @continue
+            @endif
             <div class="col-12 col-md-6 col-lg-3">
 
-                <div class="card task-card h-100 shadow-sm border-0" data-id="{{ $task->id }}" data-name="{{ $task->name }}"
-                    data-description="{{ $task->description }}" data-points="{{ $task->points }}" data-type="{{ $task->type }}"
-                    data-times="{{ $task->schedule->times ?? '' }}" data-every="{{ $task->schedule->every_n_units ?? '' }}"
+                <div class="card task-card h-100 border-0 shadow-sm p-3 task-item" data-id="{{ $task->id }}"
+                    data-name="{{ $task->name }}" data-description="{{ $task->description }}" data-points="{{ $task->points }}"
+                    data-type="{{ $task->type }}" data-times="{{ $task->schedule->times ?? '' }}"
+                    data-every="{{ $task->schedule->every_n_units ?? '' }}"
                     data-frequency="{{ $task->schedule->frequency ?? '' }}">
 
-                    <div class="card-body d-flex flex-column">
+                    <div class="d-flex flex-column h-100">
 
-                        {{-- HEADER --}}
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-
-                            <h5 class="fw-semibold mb-0">
-                                {{ $task->name }}
-                            </h5>
+                        {{-- TOP BAR --}}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
 
                             <span class="badge badge-type-{{ $task->type }}">
                                 {{ $types[$task->type] }}
                             </span>
 
+                            <div class="task-points small fw-semibold">
+                                ⭐ {{ $task->points }}
+                            </div>
+
                         </div>
+
+                        {{-- TITLE --}}
+                        <h5 class="fw-semibold mb-2">
+                            {{ $task->name }}
+                        </h5>
 
                         {{-- DESCRIPTION --}}
                         @if($task->description)
-                            <p class="fs-10 mb-3">
+                            <p class="small mb-3">
                                 {{ $task->description }}
                             </p>
                         @endif
 
+                        {{-- SPACER --}}
+                        <div class="mt-auto">
 
-                        {{-- FREQUENCY --}}
-                        @if($task->schedule)
+                            {{-- FREQUENCY --}}
+                            @if($task->schedule)
+                                <div class="task-frequency small mb-2 text-muted w-100">
+                                    <i class="bi bi-arrow-repeat me-1" style="font-size: 16px;"></i>
+                                    {{$task->schedule->times}}
+                                    {{$task->schedule->times == 1 ? 'vez' : 'veces'}}
+                                    cada
+                                    {{$task->schedule->every_n_units}}
+                                    {{ $frequencies[$task->schedule->frequency] }}
+                                </div>
+                            @endif
 
-                            <div class="task-frequency mb-3">
-
-                                <i class="bi bi-arrow-repeat me-1"></i>
-
-                                {{$task->schedule->times}}
-                                veces cada
-                                {{$task->schedule->every_n_units}}
-                                {{ $frequencies[$task->schedule->frequency] }}
-
-                            </div>
-
-                        @endif
-
-
-                        {{-- FOOTER --}}
-                        <div class="mt-auto d-flex justify-content-end">
-
-                            <div class="task-points">
-
-                                {{ $task->points }}⭐
-
-                            </div>
+                            {{-- ROOM --}}
+                            @if($task->room)
+                                <div class="task-room text-white mb-2">
+                                    <i class="bi bi-house-door me-1" style="font-size: 20px;"></i>
+                                    {{ $task->room->name }}
+                                </div>
+                            @endif
+                            @if($task->linkedTasks->count())
+                                <button class="btn btn-sm btn-light mt-2 show-linked"
+                                        data-id="{{ $task->id }}">
+                                    <i class="bi bi-diagram-3"></i>
+                                </button>
+                            @endif
 
                         </div>
-                        @if($task->room)
-                            <div class="task-room text-white mb-2">
-                                <i class="bi bi-house-door me-1" style="font-size: 20px;"></i>
-                                {{ $task->room->name }}
-                            </div>
-                        @endif
 
                     </div>
-
                 </div>
 
             </div>
@@ -98,158 +102,23 @@
 
     {{-- MODAL CREAR --}}
 
-    <div class="modal fade" id="createTaskModal">
+    @include('tasks.task-modal')
 
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-
-            <div class="modal-content rounded-4 border-0 shadow-lg">
+    <div class="modal fade" id="linkedTasksModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
 
                 <div class="modal-header border-0">
-
-                    <h5>Nueva tarea</h5>
-
+                    <h5>Relaciones de tareas</h5>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
-
                 </div>
 
-                <form method="POST" action="{{route('tasks.store')}}" id="taskForm">
-
-                    @csrf
-                    <input type="hidden" name="_method" id="formMethod" value="POST">
-
-                    <div class="modal-body">
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-
-                                Nombre
-
-                            </label>
-
-                            <input name="name" class="form-control" id="taskName">
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-
-                                Descripción
-
-                            </label>
-
-                            <textarea name="description" class="form-control" id="taskDescription"></textarea>
-
-                        </div>
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Puntos
-                            </label>
-
-                            <input type="number" name="points" class="form-control" min="1" value="1" id="taskPoints">
-
-                            <div class="form-text">
-                                Valor de completar la tarea
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-
-                                Tipo
-
-                            </label>
-
-                            <select name="type" class="form-select" id="typeSelect" >
-
-                                @foreach($types as $id => $type)
-
-                                    <option value="{{$id}}">
-
-                                        {{$type}}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Habitación</label>
-
-                            <select name="room"
-                                    id="roomSelect"
-                                    class="form-select"
-                                    required>
-
-                                @foreach($rooms as $room)
-                                    <option value="{{ $room }}">{{ $room }}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-
-                        <div id="scheduleFields" style="display:none">
-
-                            <label class="form-label mb-3">
-                                Frecuencia
-                            </label>
-
-                            <div class="frequency-builder d-flex align-items-center gap-2 flex-wrap">
-
-                                <span>Repetir</span>
-
-                                <input type="number" name="times" class="form-control text-center" style="width:80px"
-                                    value="1" min="1" id="taskTimes">
-
-                                <span>veces cada</span>
-
-                                <input type="number" name="every_n_units" class="form-control text-center"
-                                    style="width:80px" value="1" min="1" id="taskEvery" >
-
-                                <select name="frequency" class="form-select" style="width:150px" id="taskFrequency">
-
-                                    @foreach($frequencies as $id => $frequency)
-                                        <option value="{{$id}}">
-                                            {{$frequency}}
-                                        </option>
-                                    @endforeach
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer border-0">
-
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-
-                            Cancelar
-
-                        </button>
-
-                        <button class="btn btn-dark rounded-pill px-4">
-
-                            Guardar
-
-                        </button>
-
-                    </div>
-
-                </form>
+                <div class="modal-body" id="linkedTasksContainer">
+                    {{-- aquí se pinta --}}
+                </div>
 
             </div>
-
         </div>
-
     </div>
 
 @endsection
@@ -257,7 +126,7 @@
 @push('scripts')
 
     <script>
-
+        const tasks = @json($tasks);
         $('#typeSelect').on('change', function () {
 
             if ($(this).val() === 'frequency') {
@@ -313,7 +182,7 @@
 
         });
 
-        $('.task-card button').on('click', function(e){
+        $('.task-card button').on('click', function (e) {
             e.stopPropagation();
         });
 
@@ -322,6 +191,136 @@
             placeholder: "Seleccionar o crear habitación",
             width: '100%',
             dropdownParent: $('#createTaskModal'),
+        });
+
+        let currentTaskId = null;
+
+        $('.task-card').on('click', function () {
+
+            currentTaskId = $(this).data('id');
+            $('#taskForm').attr('action', '{{ route("tasks.store") }}');
+            $('#formMethod').val('POST');
+            // resto de tu lógica...
+        });
+        $("#createTaskModalBtn").on('click', function () {
+
+            currentTaskId = null;
+
+            // resto de tu lógica...
+        });
+
+        $('#createLinkedTaskBtn').on('click', function () {
+            if (!currentTaskId) return;
+
+            // limpiar formulario
+            $('#taskForm')[0].reset();
+            $('#taskForm').attr('action', '{{ route("tasks.store") }}');
+            $('#formMethod').val('POST');
+            // setear linked
+            $('#linkedTaskId').val(currentTaskId);
+            console.log($("#linkedTaskId").val());
+            // ocultar tipo
+            $('#typeField').hide();
+            $('#scheduleFields').hide();
+
+            // mostrar modal
+            $('#createTaskModal').modal('show');
+        });
+
+        $('#createTaskModal').on('hidden.bs.modal', function () {
+
+            $('#linkedTaskId').val('');
+            $('#typeField').show();
+
+        });
+
+        function renderTaskTree(task, level = 0) {
+
+            let html = `
+                <div style="margin-left:${level * 20}px" class="mb-2">
+                    <div class="d-flex align-items-center justify-content-between p-2 border rounded">
+                        
+                        <span>
+                            ${'> '.repeat(level)} ${task.name}
+                        </span>
+
+                        <div>
+                            <button class="btn btn-sm btn-dark edit-task" data-id="${task.id}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+
+                            <button class="btn btn-sm btn-danger delete-task" data-id="${task.id}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+
+            if (task.linked_tasks && task.linked_tasks.length) {
+                task.linked_tasks.forEach(child => {
+                    html += renderTaskTree(child, level + 1);
+                });
+            }
+
+            return html;
+        }
+
+        $('.show-linked').on('click', function(e){
+
+            e.stopPropagation();
+
+            const id = $(this).data('id');
+
+            const rootTask = tasks.find(t => t.id == id);
+
+            if (!rootTask) return;
+
+            const html = renderTaskTree(rootTask);
+
+            $('#linkedTasksContainer').html(html);
+
+            $('#linkedTasksModal').modal('show');
+
+        });
+        $(document).on('click', '.edit-task', function(){
+            console.log("editar");
+            const id = $(this).data('id');
+
+            const task = tasks.find(t => t.id == id);
+
+            if (!task) return;
+
+            // reutilizas tu lógica existente
+            $('#taskName').val(task.name);
+            $('#taskDescription').val(task.description);
+            $('#taskPoints').val(task.points);
+
+            $('#taskForm').attr('action', '/tasks/' + id);
+            $('#formMethod').val('PUT');
+
+            $('#linkedTasksModal').modal('hide');
+            $('#createTaskModal').modal('show');
+            currentTaskId = task.id;
+            if(task.linked_task_id){
+                // ocultar tipo
+                $('#typeField').hide();
+                $('#scheduleFields').hide();
+            }
+        });
+        $(document).on('click', '.delete-task', function(){
+
+            const id = $(this).data('id');
+
+            if (!confirm('¿Eliminar tarea?')) return;
+
+            fetch('/tasks/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            }).then(() => location.reload());
         });
     </script>
 

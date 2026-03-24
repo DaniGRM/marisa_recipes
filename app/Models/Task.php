@@ -28,4 +28,14 @@ class Task extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    public function parentTask()
+    {
+        return $this->belongsTo(Task::class, 'linked_task_id');
+    }
+
+    public function linkedTasks()
+    {
+        return $this->hasMany(Task::class, 'linked_task_id');
+    }
 }

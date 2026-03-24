@@ -156,8 +156,9 @@
     }
 
     .task-card {
-        border-radius: 16px;
-        transition: all .2s ease;
+        border-radius: 1.25rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
     }
 
     .task-card:hover {
@@ -181,6 +182,7 @@
         font-weight: 600;
         font-size: .9rem;
         color: #111;
+        opacity: 0.8;
     }
 
     .today-panel {}

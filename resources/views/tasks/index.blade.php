@@ -76,18 +76,22 @@
                             @endif
 
                             {{-- ROOM --}}
-                            @if($task->room)
-                                <div class="task-room text-white mb-2">
-                                    <i class="bi bi-house-door me-1" style="font-size: 20px;"></i>
-                                    {{ $task->room->name }}
-                                </div>
-                            @endif
-                            @if($task->linkedTasks->count())
-                                <button class="btn btn-sm btn-light mt-2 show-linked"
-                                        data-id="{{ $task->id }}">
-                                    <i class="bi bi-diagram-3"></i>
-                                </button>
-                            @endif
+                            <div class="d-flex w-100 justify-content-between">
+
+                                @if($task->room)
+                                    <div class="task-room text-white mb-2">
+                                        <i class="bi bi-house-door me-1" style="font-size: 20px;"></i>
+                                        {{ $task->room->name }}
+                                    </div>
+                                @endif
+                                @if($task->linkedTasks->count())
+                                    <button class="btn btn-sm btn-light mt-2 show-linked"
+                                            data-id="{{ $task->id }}">
+                                        <i class="bi bi-list-nested"></i>
+                                    </button>
+                                @endif
+                            </div>
+
 
                         </div>
 

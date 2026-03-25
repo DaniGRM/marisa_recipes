@@ -37,16 +37,20 @@ class TaskInstance extends Model
                     return;
                 }
             }
-
-            // Necesitamos usuario y tarea
-            if (!$taskInstance->completed_by) {
-                return;
-            }
-
             $task = $taskInstance->task;
 
             if (!$task) {
                 return;
+            }
+
+            if($task->linkedTasks()->count() > 0) {
+                foreach ($task->linkedTasks() as $linkedTask) {
+                    $instance =TaskInstance::create([
+                        'task_id'=>$linkedTask->id,
+                        'date'=>now(),
+                        'status'=>'pending'
+                    ]);
+                }
             }
 
             $user = \App\Models\User::find($taskInstance->completed_by);

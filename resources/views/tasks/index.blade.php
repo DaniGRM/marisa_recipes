@@ -107,23 +107,9 @@
     {{-- MODAL CREAR --}}
 
     @include('tasks.task-modal')
+    @include('tasks.linked-task-modal')
 
-    <div class="modal fade" id="linkedTasksModal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-4 border-0 shadow">
-
-                <div class="modal-header border-0">
-                    <h5>Relaciones de tareas</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body" id="linkedTasksContainer">
-                    {{-- aquí se pinta --}}
-                </div>
-
-            </div>
-        </div>
-    </div>
+    
 
 @endsection
 
@@ -156,7 +142,7 @@
         $('.task-card').on('click', function () {
 
             const modal = $('#createTaskModal');
-
+            currentTaskId = $(this).data('id');
             // Cambiar acción del form
             const id = $(this).data('id');
             $('#taskForm').attr('action', '/tasks/' + id);
@@ -199,13 +185,6 @@
 
         let currentTaskId = null;
 
-        $('.task-card').on('click', function () {
-
-            currentTaskId = $(this).data('id');
-            $('#taskForm').attr('action', '{{ route("tasks.store") }}');
-            $('#formMethod').val('POST');
-            // resto de tu lógica...
-        });
         $("#createTaskModalBtn").on('click', function () {
 
             currentTaskId = null;
@@ -325,6 +304,11 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 }
             }).then(() => location.reload());
+        });
+
+        flatpickr("#taskStartDate", {
+            locale: "es",
+            dateFormat: "Y-m-d"
         });
     </script>
 

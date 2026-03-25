@@ -61,7 +61,7 @@ class TaskController extends Controller
                 'times' => $request->times,
                 'every_n_units' => $request->every_n_units,
                 'start_date' => $request->start_date,
-                'end_date' => $request->end_date
+                'end_date' => $request->end_date,
             ]);
 
         }

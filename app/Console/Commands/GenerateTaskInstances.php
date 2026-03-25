@@ -25,6 +25,8 @@ class GenerateTaskInstances extends Command
             $schedule = $task->schedule;
 
             if (!$schedule) continue;
+
+            if($schedule->start_date && $schedule->start_date > $today) continue;
             // Última vez que se generó
             $lastInstance = TaskInstance::where('task_id', $task->id)
                 ->orderByDesc('date')

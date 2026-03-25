@@ -131,6 +131,15 @@
                             </select>
 
                         </div>
+                        <div class="mt-3">
+                        <label class="form-label">Fecha de inicio</label>
+
+                        <input type="text"
+                        name="start_date"
+                        id="taskStartDate"
+                        class="form-control"
+                        placeholder="Seleccionar fecha">
+                    </div>
 
                     </div>
 

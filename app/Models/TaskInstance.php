@@ -45,7 +45,7 @@ class TaskInstance extends Model
 
             if($task->linkedTasks()->count() > 0) {
                 foreach ($task->linkedTasks() as $linkedTask) {
-                    $instance =TaskInstance::create([
+                    TaskInstance::create([
                         'task_id'=>$linkedTask->id,
                         'date'=>now(),
                         'status'=>'pending'

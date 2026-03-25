@@ -18,6 +18,23 @@
         </button>
 
     </div>
+    <div class="filters d-flex gap-2 mb-4">
+
+        <select id="filterType" class="form-select" style="max-width:400px">
+            <option value="">Todos los tipos</option>
+            @foreach($types as $id => $type)
+                <option value="{{ $id }}">{{ $type }}</option>
+            @endforeach
+        </select>
+
+        <select id="filterRoom" class="form-select" style="max-width:400px">
+            <option value="">Todas las habitaciones</option>
+            @foreach($rooms as $room)
+                <option value="{{ $room }}">{{ $room }}</option>
+            @endforeach
+        </select>
+
+    </div>
 
     <div class="row g-4">
 
@@ -27,11 +44,16 @@
             @endif
             <div class="col-12 col-md-6 col-lg-3">
 
-                <div class="card task-card h-100 border-0 shadow-sm p-3 task-item" data-id="{{ $task->id }}"
-                    data-name="{{ $task->name }}" data-description="{{ $task->description }}" data-points="{{ $task->points }}"
-                    data-type="{{ $task->type }}" data-times="{{ $task->schedule->times ?? '' }}"
-                    data-every="{{ $task->schedule->every_n_units ?? '' }}"
-                    data-frequency="{{ $task->schedule->frequency ?? '' }}">
+                <div class="card task-card h-100 border-0 shadow-sm p-3 task-item"
+                data-id="{{ $task->id }}"
+                data-name="{{ $task->name }}"
+                data-description="{{ $task->description }}"
+                data-points="{{ $task->points }}"
+                data-type="{{ $task->type }}"
+                data-room="{{ $task->room->name ?? '' }}"
+                data-times="{{ $task->schedule->times ?? '' }}"
+                data-every="{{ $task->schedule->every_n_units ?? '' }}"
+                data-frequency="{{ $task->schedule->frequency ?? '' }}">
 
                     <div class="d-flex flex-column h-100">
 
@@ -310,6 +332,28 @@
             locale: "es",
             dateFormat: "Y-m-d"
         });
+        document.getElementById('filterType').addEventListener('change', applyFilters);
+        document.getElementById('filterRoom').addEventListener('change', applyFilters);
+        function applyFilters() {
+
+            const type = document.getElementById('filterType').value;
+            const room = document.getElementById('filterRoom').value;
+
+            document.querySelectorAll('.task-item').forEach(card => {
+
+                const cardType = card.dataset.type;
+                const cardRoom = card.dataset.room;
+
+                const matchesType = !type || cardType === type;
+                const matchesRoom = !room || cardRoom === room;
+
+                const visible = matchesType && matchesRoom;
+
+                const col = card.closest('.col-12');
+
+                col.style.display = visible ? '' : 'none';
+            });
+        }
     </script>
 
 @endpush

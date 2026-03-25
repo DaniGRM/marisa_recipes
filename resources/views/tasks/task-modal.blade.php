@@ -120,7 +120,7 @@
                             <input type="number" name="every_n_units" class="form-control text-center"
                                 style="width:80px" value="1" min="1" id="taskEvery">
 
-                            <select name="frequency" class="form-select" style="width:150px" id="taskFrequency">
+                            <select name="frequency" class="form-select" style="width:200px" id="taskFrequency">
 
                                 @foreach($frequencies as $id => $frequency)
                                     <option value="{{$id}}">

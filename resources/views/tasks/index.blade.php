@@ -98,7 +98,7 @@
                             @endif
 
                             {{-- ROOM --}}
-                            <div class="d-flex w-100 justify-content-between">
+                            <div class="d-flex w-100 justify-content-between mt-2">
 
                                 @if($task->room)
                                     <div class="task-room text-white mb-2">
@@ -106,12 +106,25 @@
                                         {{ $task->room->name }}
                                     </div>
                                 @endif
-                                @if($task->linkedTasks->count())
-                                    <button class="btn btn-sm btn-light mt-2 show-linked"
-                                            data-id="{{ $task->id }}">
-                                        <i class="bi bi-list-nested"></i>
-                                    </button>
-                                @endif
+                                <div class="row">
+                                    @if($task->linkedTasks->count())
+                                    <div class="col-6">
+                                        <button class="btn btn-sm btn-light show-linked"
+                                                data-id="{{ $task->id }}">
+                                            <i class="bi bi-list-nested"></i>
+                                        </button>
+                                    </div>
+                                    @endif
+                                    <div class="col-6">
+                                    <form method="POST" action="{{ route('tasks.destroy', $task->id) }}" class="delete-task-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Eliminar tarea">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -354,6 +367,16 @@
                 col.style.display = visible ? '' : 'none';
             });
         }
+        document.querySelectorAll('.delete-task-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const taskName = this.closest('.task-item')?.dataset.name || 'esta tarea';
+                if (confirm(`¿Seguro que quieres eliminar ${taskName}?`)) {
+                    this.submit();
+                }
+            });
+        });
     </script>
 
 @endpush

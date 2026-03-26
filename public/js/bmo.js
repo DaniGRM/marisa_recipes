@@ -33,13 +33,13 @@ function activarApp() {
 screensaver.addEventListener('click', function(e) {
     e.stopPropagation(); // evita que el click se propague a elementos debajo
     e.preventDefault();  // evita acciones por defecto si hubiera
-    activarApp();
+    location.reload();
 });
 
 screensaver.addEventListener('touchstart', function(e) {
     e.stopPropagation();
     e.preventDefault();
-    activarApp();
+    location.reload();
 });
 
 let timeout;

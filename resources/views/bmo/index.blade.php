@@ -29,6 +29,17 @@
     </div>
     @include('bmo.user-select')
     @include('bmo.task-completed')
+    <div id="bmo-loader" class="bmo-loader">
+        <div class="loader-content">
+
+            <div class="spinner"></div>
+
+            <div class="loader-text">
+                Procesando...
+            </div>
+
+        </div>
+    </div>
 </body>
 <script>
     let taskCompleted = @json($taskCompleted ?? null);

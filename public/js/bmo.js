@@ -73,6 +73,7 @@ function setUser(id) {
 }
 
 function completeTask(taskId) {
+    showLoader();
     const user = document.getElementById('user' + taskId);
     const form = document.getElementById('formTask' + taskId);
     user.value = selectedUser;
@@ -80,6 +81,7 @@ function completeTask(taskId) {
 }
 
 function completeCommonTask(taskId) {
+    showLoader();
     const user = document.getElementById('user' + taskId);
     const form = document.getElementById('formCommonTask' + taskId);
     user.value = selectedUser;
@@ -183,4 +185,27 @@ function launchConfetti() {
         }
 
     })();
+}
+const messages = [
+    "Procesando...",
+    "Cocinando magia...",
+    "Sumando puntos...",
+    "BMO está feliz :)",
+    "Ole la limpieza :O",
+    "Puntitos, puntitos ricos"
+];
+
+function showLoader() {
+    const loader = document.getElementById('bmo-loader');
+    const text = loader.querySelector('.loader-text');
+
+    text.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+    loader.classList.add('active');
+}
+function hideLoader() {
+    const loader = document.getElementById('bmo-loader');
+    if (loader) {
+        loader.classList.remove('active');
+    }
 }

@@ -206,3 +206,47 @@ body {
 .bmo-message h1{
     margin-bottom:20px;
 }
+.bmo-loader {
+    position: fixed;
+    inset: 0;
+    background: #8bd3a6;
+    z-index: 9999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+.bmo-loader.active {
+    display: flex;
+}
+
+.loader-content {
+    text-align: center;
+    color: #000;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(0,0,0);
+    border-top: 6px solid #00ffcc;
+    border-radius: 50%;
+
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loader-text {
+    font-size: 3rem;
+    letter-spacing: 2px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

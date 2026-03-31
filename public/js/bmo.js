@@ -219,11 +219,10 @@ function updateUserIcon() {
     const userIconImg = document.querySelector('#current-user-icon img');
 
     if (!userIconImg) return;
-    console.log(userIconImg);
-    console.log(selectedUser);
-    if (selectedUser === 1) {
+
+    if (selectedUser == 1) {
         userIconImg.src = 'bmo.png';
-    } else if (selectedUser === 2) {
+    } else if (selectedUser == 2) {
         userIconImg.src = 'bma.png';
     } else {
         userIconImg.src = ''; // Ningún usuario
@@ -240,10 +239,10 @@ document.querySelector('#current-user-icon').addEventListener('click', function(
     const tasksCompleted = document.getElementById('userCardTasksCompleted');
     let cardUser = users[selectedUser - 1];
     // Datos dinámicos según selectedUser
-    if (selectedUser === 1) {
+    if (selectedUser == 1) {
         img.src = 'bmo-dni.png';
         name.textContent = 'BMO';
-    } else if (selectedUser === 2) {
+    } else if (selectedUser == 2) {
         img.src = 'bma-dni.png';
         name.textContent = 'BMA';
     }

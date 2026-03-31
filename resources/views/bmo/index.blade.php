@@ -34,9 +34,8 @@
 </body>
 <script>
     let taskCompleted = @json($taskCompleted ?? null);
-    let selectedUser = '{{$currentUser }}';
+    let selectedUser = '{{ $currentUser }}';
     let users = {!! $users->toJson() !!};
-    console.log("puntos" + users[0].current_month_points);
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>

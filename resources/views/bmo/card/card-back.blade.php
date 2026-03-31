@@ -17,6 +17,16 @@
      if($userTasks == 0){
         $userTasks = 1;
     }
+
+    if($users[0]->current_month_points == $users[1]->current_month_points){
+        if($users[0]->current_month_tasks == $users[1]->current_month_tasks){
+            unset($userWinner);
+        }elseif($users[0]->current_month_tasks > $users[1]->current_month_tasks){
+            $userWinner = 1;
+        }else{
+            $userWinner = 2;
+        }
+    }
 @endphp
 <div class="card-face card-back">
     <div class="p-4 h-100 d-flex flex-column justify-content-between">
@@ -26,8 +36,12 @@
         </div>
         <div class="row h-100 d-flex align-items-center">
             <div class="col-3 text-center">
-                @if(isset($userWinner) && $userWinner == 1)<img src="crown.png" style="height: 50px">@endif
+                @if(isset($userWinner) && $userWinner == 1)
+                <img src="crown.png" style="height: 50px">
+                <img src="bmo-win.png" class="w-100">
+                @else
                 <img src="bmo-figth.png" class="w-100">
+                @endif
             </div>
             <div class="col-6 text-center">
                 <div class="stats-container mt-4">
@@ -72,8 +86,12 @@
                 </div>
             </div>
             <div class="col-3 text-center">
-                @if(isset($userWinner) && $userWinner == 2)<img src="crown.png" style="height: 50px">@endif
+                @if(isset($userWinner) && $userWinner == 2)
+                <img src="crown.png" style="height: 50px">
+                <img src="bmo-win.png" class="w-100">
+                @else
                 <img src="bma-figth.png" class="w-100">
+                @endif
             </div>
         </div>
 

@@ -1,0 +1,7 @@
+<!-- FOOTER -->
+<div class="text-end mt-auto d-flex justify-content-between">
+    <div class="icon reverse-card mx-4">
+        <i class="bi bi-repeat"></i>
+    </div>
+    <button id="closeUserCard" class="btn btn-light rounded-pill px-4">Volver</button>
+</div>

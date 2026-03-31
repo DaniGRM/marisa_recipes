@@ -279,3 +279,9 @@ document.getElementById('closeUserCard').addEventListener('click', function() {
     // Resetear screens
     document.getElementById('user-card-info-screen').classList.remove('active');
 });
+
+document.querySelectorAll('.reverse-card').forEach(btn => {
+    btn.addEventListener('click', function () {
+        document.querySelector('.card-inner').classList.toggle('flipped');
+    });
+});

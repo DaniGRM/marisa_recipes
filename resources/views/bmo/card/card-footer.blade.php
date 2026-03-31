@@ -3,5 +3,4 @@
     <div class="icon reverse-card mx-4">
         <i class="bi bi-repeat"></i>
     </div>
-    <button class="closeUserCard btn btn-light rounded-pill px-4">Volver</button>
 </div>

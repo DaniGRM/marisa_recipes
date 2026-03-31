@@ -1,6 +1,8 @@
 <!-- FRONT -->
 <div class="card-face card-front">
-
+    <div class="icon close-card mx-4 w-100 d-flex justify-content-end pe-5 " style="z-index: 999; position: absolute" id="closeUserCard" onclick="closeCard()">
+        <i class="bi bi-x-lg " ></i>
+    </div>
     <div class="text-black p-4 h-100 d-flex flex-column">
 
         <div class="d-flex h-100 align-items-start justify-content-between gap-3 mb-4 w-100">

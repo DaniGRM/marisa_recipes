@@ -170,6 +170,12 @@ body {
     color: #1b4332;
 }
 
+.icon.close-card{
+   font-size: 6rem; 
+    background: transparent;
+    color: #1b4332;
+}
+
 .icon:active {
     transform: scale(0.9);
 }

@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 const screensaver = document.getElementById('screensaver');
+const user_card_screen = document.getElementById('user-card-screen');
 const app = document.getElementById('app');
 const user_select = document.getElementById('user-select');
 
@@ -49,6 +50,8 @@ function resetTimer() {
     timeout = setTimeout(() => {
         screensaver.style.display = 'flex';
         app.style.display = 'none';
+        user_card_screen.style. display = 'none';
+        
     }, 60000); // 60 segundos
 }
 
@@ -240,15 +243,15 @@ document.querySelector('#current-user-icon').addEventListener('click', function(
     if (selectedUser === 1) {
         img.src = 'bmo-dni.png';
         name.textContent = 'BMO';
-        tasksCompleted.textContent = 'Tareas completadas: 45';
     } else if (selectedUser === 2) {
         img.src = 'bma-dni.png';
         name.textContent = 'BMA';
-        tasksCompleted.textContent = 'Tareas completadas: 28';
     }
 
+    tasksCompleted.textContent = 'Tareas completadas: ' + cardUser.current_month_tasks;
+
     name.textContent = cardUser.name;
-    points.innerHTML = cardUser.points + ' <i class="bi bi-coin"></i>';
+    points.innerHTML = cardUser.current_month_points + ' <i class="bi bi-coin"></i>';
     overlay.style.display = 'flex';
     // Mostrar la pantalla de info después de 0.3s para efecto tipo “pantalla”
      overlay.classList.add('active');
@@ -273,15 +276,6 @@ document.querySelector('#current-user-icon').addEventListener('click', function(
 });
 
 // Cerrar pantalla
-document.querySelectorAll('.closeUserCard').forEach(btn => {
-    btn.addEventListener('click', function() {
-        console.log("aa");
-        const overlay = document.getElementById('user-card-screen');
-        overlay.style.display = 'none';
-        // Resetear screens
-        document.getElementById('user-card-info-screen').classList.remove('active');
-    });
-});
 
 document.querySelectorAll('.reverse-card').forEach(btn => {
     btn.addEventListener('click', function () {
@@ -306,10 +300,8 @@ function animateStats() {
         const leftBar = row.querySelector('.stat-left');
         const rightBar = row.querySelector('.stat-right');
 
-        const max = Math.max(leftValue, rightValue);
-
-        const leftScale = leftValue / max;
-        const rightScale = rightValue / max;
+        const leftScale = leftValue / 100;
+        const rightScale = rightValue / 100;
 
         setTimeout(() => {
             leftBar.style.transform = `scaleX(${leftScale})`;
@@ -318,4 +310,10 @@ function animateStats() {
 
     });
 
+}
+function closeCard(){
+    const overlay = document.getElementById('user-card-screen');
+    overlay.style.display = 'none';
+    // Resetear screens
+    document.getElementById('user-card-info-screen').classList.remove('active');
 }

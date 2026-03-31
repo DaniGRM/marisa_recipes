@@ -60,6 +60,7 @@ class TaskInstance extends Model
 
             // Sumar puntos
             $user->increment('points', $task->points);
+            $user->addPoints($task->points);
         });
     }
     public function task()

@@ -76,7 +76,13 @@ class TaskInstanceController extends Controller
         if($taskCompleted){
             session()->forget('task_completed');
         }
-        $users = User::whereIn('id', [1,2])->get();
+        
+        $now = Carbon::now();
+        $users = User::whereIn('id', [1,2])
+            ->with(['monthlyPoints' => function ($q) use ($now) {
+            $q->where('year', $now->year)
+            ->where('month', $now->month);
+        }])->get();
         $today = now()->toDateString();
 
         $tasks = TaskInstance::with('task')

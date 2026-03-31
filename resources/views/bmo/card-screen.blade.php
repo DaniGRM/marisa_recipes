@@ -6,7 +6,7 @@
         <div class="user-card-container">
 
     <div class="card-inner">
-
+        
         @include('bmo.card.card-front')
         @include('bmo.card.card-back')
 

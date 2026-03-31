@@ -6,7 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: none;    
+    /* cursor: none;     */
 }
 
 .screen {
@@ -150,8 +150,8 @@ body {
 }
 
 .icon {
-    width: 6rem;
-    height: 6rem;
+    width: 7rem;
+    height: 7rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -162,6 +162,12 @@ body {
     color: white;
     text-decoration: none;
     padding-bottom: 1rem;
+}
+
+.icon.reverse-card{
+   font-size: 6rem; 
+    background: transparent;
+    color: #1b4332;
 }
 
 .icon:active {
@@ -249,4 +255,57 @@ body {
     to {
         transform: rotate(360deg);
     }
+}
+.user-card-container {
+    position: relative;
+    border-radius: 20px;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 8px solid #1b4332;
+}
+
+.user-card-container .user-photo img {
+    border: 4px solid #1b4332;
+    border-radius: 20px;
+    background-color: #52916a;
+}
+
+.bmo-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bmo-screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    padding: 20px;
+}
+
+.bmo-screen.active {
+    display: block;
+}
+
+.user-info {
+    margin: 0 0 5px 0;
+    padding: 1rem 4rem 4rem 4rem;
+    font-size: 2rem;
+}
+/* 
+.user-img{
+
+} */
+
+.points-icon{
+    display: flex;
+    height: inherit;
+    align-content: center;
+    flex-wrap: wrap;
 }

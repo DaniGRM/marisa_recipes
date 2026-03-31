@@ -9,7 +9,7 @@
             <h2>Hoy</h2>
 
             <div class="points-box">
-                ⭐ {{ $totalPoints }} pts
+                 {{ $totalPoints }} <i class="bi bi-coin"></i>
             </div>
 
         </div>
@@ -33,9 +33,9 @@
                             {{-- FOOTER --}}
                             <div class="mt-auto d-flex justify-content-end">
 
-                                <div class="task-points">
+                                <div class="task-points" >
 
-                                    {{ $commonTask->points }}⭐
+                                    {{ $commonTask->points }}<i class="bi bi-coin"  style="font-size: 1rem"></i>
 
                                 </div>
 
@@ -65,7 +65,7 @@
 
                             <div class="task-points">
 
-                                {{ $commonTask->points }}⭐
+                                {{ $commonTask->points }}<i class="bi bi-coin"  style="font-size: 1rem"></i>
 
                             </div>
 

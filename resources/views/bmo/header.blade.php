@@ -5,8 +5,10 @@
     </div>
 
     <div class="nav-icons">
-
-        <div class="icon active" data-view="tasks">
+        <div id="current-user-icon" class="icon mx-4">
+            <img src="" class="w-100" alt="Usuario">
+        </div>
+        <div class="icon active mx-4" data-view="tasks">
             <i class="bi bi-list-check"></i>
         </div>
 

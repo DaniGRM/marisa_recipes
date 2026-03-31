@@ -65,7 +65,7 @@
                             </span>
 
                             <div class="task-points small fw-semibold">
-                                ⭐ {{ $task->points }}
+                                <span>{{ $task->points }}</span><i class="bi bi-coin d-flex"  style="font-size: 1.2rem"></i>
                             </div>
 
                         </div>

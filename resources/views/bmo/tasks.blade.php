@@ -22,9 +22,9 @@
                     {{ $task->completedBy->name }}
                 </span>
             @endif
-            <span class="points">
-                ⭐ {{ $task->task->points }}
-            </span>
+            <div class="points d-flex">
+                <span> {{ $task->task->points }}</span><i class="bi bi-coin points-icon"></i> 
+            </div>
         </div>
 
     @endforeach

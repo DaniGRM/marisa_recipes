@@ -66,10 +66,12 @@ document.addEventListener('touchstart', function(e){
 resetTimer();
 
 function setUser(id) {
+    
     selectedUser = id;
     user_select.style.display = 'none';
     app.style.display = 'flex';
     showView('tasks');
+    updateUserIcon();
 }
 
 function completeTask(taskId) {
@@ -209,3 +211,71 @@ function hideLoader() {
         loader.classList.remove('active');
     }
 }
+
+function updateUserIcon() {
+    const userIconImg = document.querySelector('#current-user-icon img');
+
+    if (!userIconImg) return;
+    console.log(userIconImg);
+    console.log(selectedUser);
+    if (selectedUser === 1) {
+        userIconImg.src = 'bmo.png';
+    } else if (selectedUser === 2) {
+        userIconImg.src = 'bma.png';
+    } else {
+        userIconImg.src = ''; // Ningún usuario
+    }
+}
+
+// Mostrar modal al click en el icono de usuario
+document.querySelector('#current-user-icon').addEventListener('click', function() {
+    const overlay = document.getElementById('user-card-screen');
+    const card = document.querySelector('.user-card-container');
+    const img = document.getElementById('userCardImg');
+    let name = document.getElementById('userCardName');
+    const points = document.getElementById('userCardPoints');
+    const tasksCompleted = document.getElementById('userCardTasksCompleted');
+    let cardUser = users[selectedUser - 1];
+    // Datos dinámicos según selectedUser
+    if (selectedUser === 1) {
+        img.src = 'bmo.png';
+        name.textContent = 'BMO';
+        tasksCompleted.textContent = 'Tareas completadas: 45';
+    } else if (selectedUser === 2) {
+        img.src = 'bma.png';
+        name.textContent = 'BMA';
+        tasksCompleted.textContent = 'Tareas completadas: 28';
+    }
+
+    name.textContent = cardUser.name;
+    points.innerHTML = cardUser.points + ' <i class="bi bi-coin"></i>';
+    overlay.style.display = 'flex';
+    // Mostrar la pantalla de info después de 0.3s para efecto tipo “pantalla”
+     overlay.classList.add('active');
+    document.getElementById('user-card-info-screen').classList.add('active');
+    // Animación tipo "tarjeta que aparece"
+    anime({
+        targets: overlay,
+        opacity: [0, 1],
+        duration: 200,
+        easing: 'linear'
+    });
+
+    anime({
+        targets: card,
+        scale: [0.6, 1],
+        translateY: [80, 0],
+        opacity: [0, 1],
+        duration: 600,
+        easing: 'easeOutElastic(1, .6)'
+    });
+
+});
+
+// Cerrar pantalla
+document.getElementById('closeUserCard').addEventListener('click', function() {
+    const overlay = document.getElementById('user-card-screen');
+    overlay.style.display = 'none';
+    // Resetear screens
+    document.getElementById('user-card-info-screen').classList.remove('active');
+});

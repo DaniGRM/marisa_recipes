@@ -5,7 +5,7 @@
     </span>
 
     <span class="points">
-        ⭐ {{ $totalPoints }}
+        {{ $totalPoints }}<i class="bi bi-coin"></i> 
     </span>
 
 </div>

@@ -273,15 +273,49 @@ document.querySelector('#current-user-icon').addEventListener('click', function(
 });
 
 // Cerrar pantalla
-document.getElementById('closeUserCard').addEventListener('click', function() {
-    const overlay = document.getElementById('user-card-screen');
-    overlay.style.display = 'none';
-    // Resetear screens
-    document.getElementById('user-card-info-screen').classList.remove('active');
+document.querySelectorAll('.closeUserCard').forEach(btn => {
+    btn.addEventListener('click', function() {
+        console.log("aa");
+        const overlay = document.getElementById('user-card-screen');
+        overlay.style.display = 'none';
+        // Resetear screens
+        document.getElementById('user-card-info-screen').classList.remove('active');
+    });
 });
 
 document.querySelectorAll('.reverse-card').forEach(btn => {
     btn.addEventListener('click', function () {
-        document.querySelector('.card-inner').classList.toggle('flipped');
+        const card = document.querySelector('.card-inner');
+        card.classList.toggle('flipped');
+
+        if (card.classList.contains('flipped')) {
+            setTimeout(() => {
+                animateStats();
+            }, 300); // espera a que termine el giro
+        }
     });
 });
+
+function animateStats() {
+
+    document.querySelectorAll('.stat-row').forEach(row => {
+
+        const leftValue = parseInt(row.dataset.left);
+        const rightValue = parseInt(row.dataset.right);
+
+        const leftBar = row.querySelector('.stat-left');
+        const rightBar = row.querySelector('.stat-right');
+
+        const max = Math.max(leftValue, rightValue);
+
+        const leftScale = leftValue / max;
+        const rightScale = rightValue / max;
+
+        setTimeout(() => {
+            leftBar.style.transform = `scaleX(${leftScale})`;
+            rightBar.style.transform = `scaleX(${rightScale})`;
+        }, 100);
+
+    });
+
+}

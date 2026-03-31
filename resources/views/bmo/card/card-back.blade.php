@@ -10,10 +10,13 @@
         }
         $userPoints += $user->current_month_points;     
         $userTasks += $user->current_month_tasks;
-
-        
     }
-
+    if($userPoints == 0){
+        $userPoints = 1;
+    }
+     if($userTasks == 0){
+        $userTasks = 1;
+    }
 @endphp
 <div class="card-face card-back">
     <div class="p-4 h-100 d-flex flex-column justify-content-between">

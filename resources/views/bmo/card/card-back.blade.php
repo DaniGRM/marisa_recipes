@@ -23,7 +23,7 @@
         </div>
         <div class="row h-100 d-flex align-items-center">
             <div class="col-3 text-center">
-                @if($userWinner == 1)<img src="crown.png" style="height: 50px">@endif
+                @if(isset($userWinner) && $userWinner == 1)<img src="crown.png" style="height: 50px">@endif
                 <img src="bmo-figth.png" class="w-100">
             </div>
             <div class="col-6 text-center">
@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="col-3 text-center">
-                @if($userWinner == 2)<img src="crown.png" style="height: 50px">@endif
+                @if(isset($userWinner) && $userWinner == 2)<img src="crown.png" style="height: 50px">@endif
                 <img src="bma-figth.png" class="w-100">
             </div>
         </div>

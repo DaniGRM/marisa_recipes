@@ -238,11 +238,11 @@ document.querySelector('#current-user-icon').addEventListener('click', function(
     let cardUser = users[selectedUser - 1];
     // Datos dinámicos según selectedUser
     if (selectedUser === 1) {
-        img.src = 'bmo.png';
+        img.src = 'bmo-dni.png';
         name.textContent = 'BMO';
         tasksCompleted.textContent = 'Tareas completadas: 45';
     } else if (selectedUser === 2) {
-        img.src = 'bma.png';
+        img.src = 'bma-dni.png';
         name.textContent = 'BMA';
         tasksCompleted.textContent = 'Tareas completadas: 28';
     }

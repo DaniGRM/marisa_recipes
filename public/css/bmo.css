@@ -309,3 +309,7 @@ body {
     align-content: center;
     flex-wrap: wrap;
 }
+
+#userCardName{
+    font-size: 3rem;
+}

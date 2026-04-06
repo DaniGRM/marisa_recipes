@@ -7,7 +7,6 @@
             @else
                 <img src="bma-card.png" class="w-100">
             @endif
-            {{ $user->name }}
         </div>
         @endforeach
     </div>

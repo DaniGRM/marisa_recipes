@@ -88,7 +88,7 @@ function completeTaskConfirm(taskId){
 function completeTask() {
     const btn = document.getElementById('confirmTaskBtn');
     let taskId = btn.dataset['task'];
-    let isCommon = btn.dataset['task'];
+    let isCommon = btn.dataset['common'];
     showLoader();
     const user = document.getElementById('user' + taskId);
     const form = document.getElementById('formTask' + taskId);

@@ -1,4 +1,7 @@
 <div id="user-select" class="screen">
+    <div class="row pb-5">
+        <img src="choosefighter.png" class="w-100">
+    </div>
     <div class="row">
         @foreach ($users as $user)
         <div class="col-6" onclick="setUser({{ $user->id }})">

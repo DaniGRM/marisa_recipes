@@ -105,7 +105,7 @@ function completeCommonTaskConfirm(taskId){
     taskConfirm.classList.add('active');
     const btn = document.getElementById('confirmTaskBtn');
     btn.dataset['task'] = taskId;
-    btn.dataset['common'] = false;
+    btn.dataset['common'] = true;
 
 }
 

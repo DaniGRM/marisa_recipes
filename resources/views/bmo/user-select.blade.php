@@ -3,7 +3,7 @@
         @foreach ($users as $user)
         <div class="col-6" onclick="setUser({{ $user->id }})">
             @if($user->id == 1)
-                <img src="bma-card.png" class="w-100">
+                <img src="bmo-card.png" class="w-100">
             @else
                 <img src="bma-card.png" class="w-100">
             @endif

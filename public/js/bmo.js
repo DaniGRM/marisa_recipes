@@ -91,7 +91,7 @@ function completeTask() {
     let isCommon = btn.dataset['common'];
     showLoader();
     const user = document.getElementById('user' + taskId);
-    const form = document.getElementById('formTask' + taskId);
+    let form = document.getElementById('formTask' + taskId);
 
     if(isCommon == 'true'){
         form = document.getElementById('formCommonTask' + taskId);

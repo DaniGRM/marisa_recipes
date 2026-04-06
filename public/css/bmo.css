@@ -6,7 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* cursor: none;     */
+    cursor: none;    
 }
 
 .screen {
@@ -75,7 +75,6 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 23%;
-    cursor: pointer;
     box-shadow:   -15px 0 0 0 black,
                  15px 0 0 0 black,
                  0 -15px 0 0 black,
@@ -123,7 +122,6 @@ body {
 }
 
 #screensaver {
-    cursor: none;
     position: fixed;
     top: 0;
     left: 0;

@@ -77,22 +77,42 @@ function setUser(id) {
     updateUserIcon();
 }
 
-function completeTask(taskId) {
+function completeTaskConfirm(taskId){
+    const taskConfirm = document.getElementById('bmo-task-confirm');
+    taskConfirm.classList.add('active');
+    const btn = document.getElementById('confirmTaskBtn');
+    btn.dataset['task'] = taskId;
+    btn.dataset['common'] = false;
+
+}
+function completeTask() {
+    const btn = document.getElementById('confirmTaskBtn');
+    let taskId = btn.dataset['task'];
+    let isCommon = btn.dataset['task'];
     showLoader();
     const user = document.getElementById('user' + taskId);
     const form = document.getElementById('formTask' + taskId);
+
+    if(isCommon == 'true'){
+        form = document.getElementById('formCommonTask' + taskId);
+    }
     user.value = selectedUser;
     form.submit();
 }
 
-function completeCommonTask(taskId) {
-    showLoader();
-    const user = document.getElementById('user' + taskId);
-    const form = document.getElementById('formCommonTask' + taskId);
-    user.value = selectedUser;
-    form.submit();
+function completeCommonTaskConfirm(taskId){
+    const taskConfirm = document.getElementById('bmo-task-confirm');
+    taskConfirm.classList.add('active');
+    const btn = document.getElementById('confirmTaskBtn');
+    btn.dataset['task'] = taskId;
+    btn.dataset['common'] = false;
+
 }
 
+function cancelCompleteTask(){
+    const taskConfirm = document.getElementById('bmo-task-confirm');
+    taskConfirm.classList.remove('active');
+}
 // --- VISTAS BMO ---
 function showView(viewName) {
 

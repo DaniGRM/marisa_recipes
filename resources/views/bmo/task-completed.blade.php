@@ -6,7 +6,7 @@
     </div>
 
     {{-- Pantalla texto --}}
-    <div id="bmo-text-screen" class="bmo-screen ">
+    <div id="bmo-text-screen" class="bmo-screen py-5">
 
         <div class="bmo-message">
 

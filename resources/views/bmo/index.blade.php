@@ -29,6 +29,7 @@
     </div>
     @include('bmo.user-select')
     @include('bmo.task-completed')
+    @include('bmo.confirm')
     @include('bmo.loader')
     @include('bmo.card-screen')
 </body>

@@ -2,7 +2,7 @@
 
     @foreach($tasks as $task)
 
-        <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}">
+        <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}" @if($task->status ==='pending') onclick="completeTaskConfirm({{ $task->task->id }})" @endif>
 
             <span>
                 {{ $task->task->name }}
@@ -14,7 +14,6 @@
                     action="{{ route('bmo.tasks.complete', $task->task->id) }}">
                     @csrf
                     <input type="hidden" name="user" id="user{{ $task->task->id }}" value="{{$currentUser }}">
-                    <button type="button" class="btn btn-lg" onclick="completeTask({{ $task->task->id }})">OK</button>
                 </form>
 
             @else
@@ -23,7 +22,7 @@
                 </span>
             @endif
             <div class="points d-flex">
-                <span> {{ $task->task->points }}</span><i class="bi bi-coin points-icon"></i> 
+                <span class="px-3"> {{ $task->task->points }}</span>
             </div>
         </div>
 

@@ -28,7 +28,7 @@ body {
     flex-direction: column;
     gap: 10px;
     overflow: auto;
-    font-size: 2.5rem;
+    font-size: 3rem;
 
 }
 
@@ -44,23 +44,42 @@ body {
 .task {
     background: #b9fbc0;
     padding: 12px;
-    margin-top: 20px;
-    border-radius: 12px;
+    margin: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow:   -15px 0 0 0 black,
+                 15px 0 0 0 black,
+                 0 -15px 0 0 black,
+                 0 15px 0 0 black;
+}
+.confirm-button{
+    background: #1b4332;
+    color: white;
+    display: block;
+    width: 50%;
+    height: 35vh;
+    margin: 40px;
+    font-size: 4rem;
+    box-shadow:   -15px 0 0 0 black,
+                 15px 0 0 0 black,
+                 0 -15px 0 0 black,
+                 0 15px 0 0 black;
 }
 
 .common-task {
     background: #b9fbc0;
     padding: 12px;
-    margin-top: 20px;
-    border-radius: 12px;
+    margin: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 23%;
     cursor: pointer;
+    box-shadow:   -15px 0 0 0 black,
+                 15px 0 0 0 black,
+                 0 -15px 0 0 black,
+                 0 15px 0 0 black;
 }
 .task.completed {
     opacity: 0.5!important;
@@ -86,9 +105,13 @@ body {
 
 .points {
     background: #ffd60a;
-    padding: 15px 20px;
-    border-radius: 10px;
+    margin: 10px;
+    padding: 5px;
     font-size: 3rem;
+    box-shadow:   -4px 0 0 0 black,
+                 4px 0 0 0 black,
+                 0 -4px 0 0 black,
+                 0 4px 0 0 black;
 }
 
 .task-count {
@@ -140,7 +163,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom:30px;
     justify-content: space-between;
 }
 
@@ -157,11 +180,14 @@ body {
     justify-content: center;
     font-size: 3rem;
     /* tamaño del icono dentro */
-    border-radius: 0.75rem;
     background: #1b4332;
     color: white;
     text-decoration: none;
     padding-bottom: 1rem;
+    box-shadow:   -10px 0 0 0 black,
+                 10px 0 0 0 black,
+                 0 -10px 0 0 black,
+                 0 10px 0 0 black;
 }
 
 .icon.reverse-card{
@@ -293,12 +319,8 @@ body {
     position: absolute;
     inset: 0;
     display: none;
-    padding: 20px;
 }
 
-.bmo-screen.active {
-    display: block;
-}
 
 .user-info {
     margin: 0 0 5px 0;

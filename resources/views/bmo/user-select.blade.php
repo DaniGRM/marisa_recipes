@@ -1,5 +1,5 @@
 <div id="user-select" class="screen">
-    <div class="row pb-5 d-flex justify-content-center">
+    <div class="row pb-3 d-flex justify-content-center">
         <img src="choosefighter.png" style="width: 80%">
     </div>
     <div class="row">

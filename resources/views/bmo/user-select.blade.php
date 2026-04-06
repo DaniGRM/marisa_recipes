@@ -1,6 +1,6 @@
 <div id="user-select" class="screen">
-    <div class="row pb-5">
-        <img src="choosefighter.png" class="w-100">
+    <div class="row pb-5 d-flex justify-content-center">
+        <img src="choosefighter.png" style="width: 80%">
     </div>
     <div class="row">
         @foreach ($users as $user)

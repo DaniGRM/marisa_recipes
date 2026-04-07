@@ -103,14 +103,10 @@ body {
 }
 
 .points {
-    background: #ffd60a;
-    margin: 10px;
-    padding: 5px;
-    font-size: 3rem;
-    box-shadow:   -4px 0 0 0 black,
-                 4px 0 0 0 black,
-                 0 -4px 0 0 black,
-                 0 4px 0 0 black;
+    /* margin: 10px; */
+    /* padding: 5px; */
+    font-size: 2.5rem;
+    width: 220px;
 }
 
 .task-count {
@@ -412,4 +408,22 @@ body {
 
 .stat-text{
     font-size: 1.5rem;
+}
+
+.btn-background {
+    background-image: url('/button3.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border: none;
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    width: 210px;
+    height: 74px;
 }

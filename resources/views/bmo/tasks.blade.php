@@ -22,7 +22,7 @@
                 </span>
             @endif
             <div class="points d-flex">
-                <span class="px-3"> {{ $task->task->points }}</span>
+                <span class="px-3 btn-background"> {{ $task->task->points }}</span>
             </div>
         </div>
 

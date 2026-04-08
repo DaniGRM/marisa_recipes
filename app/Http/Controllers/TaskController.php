@@ -47,6 +47,7 @@ class TaskController extends Controller
             'type' => $type,
             'points' => $request->points,
             'room_id' => $room->id,
+            'stackable' => $request->has('stackable') ? true : false,
         ]);
 
         if($linkedTaskId){
@@ -76,13 +77,13 @@ class TaskController extends Controller
         $room = Room::firstOrCreate([
             'name' => $roomInput
         ]);
-
         $task->update([
             'name'=>$request->name,
             'description'=>$request->description,
             'type'=>$task->linked_task_id ? 'linked' : $request->type,
             'points' => $request->points,
             'room_id' => $room->id,
+            'stackable' => $request->stackable ? 1 : 0,
         ]);
 
         if($task->type === 'frequency'){

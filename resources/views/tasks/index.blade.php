@@ -53,7 +53,10 @@
                 data-room="{{ $task->room->name ?? '' }}"
                 data-times="{{ $task->schedule->times ?? '' }}"
                 data-every="{{ $task->schedule->every_n_units ?? '' }}"
-                data-frequency="{{ $task->schedule->frequency ?? '' }}">
+                data-frequency="{{ $task->schedule->frequency ?? '' }}"
+                data-start="{{ $task->schedule->start_date ?? '' }}"
+                data-stackable="{{ $task->stackable ?? false }}"
+                >
 
                     <div class="d-flex flex-column h-100">
 
@@ -185,15 +188,18 @@
 
             // Rellenar campos
             $('#taskName').val($(this).data('name'));
+            $('#roomSelect').val($(this).data('room')).trigger('change');
             $('#taskDescription').val($(this).data('description'));
             $('#taskPoints').val($(this).data('points'));
             $('#typeSelect').val($(this).data('type')).trigger('change');
 
             // Frecuencia
+            $('#taskStartDate').val($(this).data('start').replace(' 00:00:00', ''));
             $('#taskTimes').val($(this).data('times'));
             $('#taskEvery').val($(this).data('every'));
             $('#taskFrequency').val($(this).data('frequency'));
-
+            
+            $("#taskStackable").prop('checked', $(this).data('stackable'));
             // Mostrar modal
             modal.modal('show');
         });
@@ -204,6 +210,8 @@
 
             $('#taskForm')[0].reset();
             $('#scheduleFields').hide();
+            // Resetear roomSelect a vacío
+            $('#roomSelect').val(null).trigger('change');
 
         });
 
@@ -346,7 +354,14 @@
             dateFormat: "Y-m-d"
         });
         document.getElementById('filterType').addEventListener('change', applyFilters);
-        document.getElementById('filterRoom').addEventListener('change', applyFilters);
+        document.getElementById('filterRoom').addEventListener('change', function() {
+            const selectedRoom = this.value;
+            // Sincronizar #roomSelect cuando cambia #filterRoom
+            if (selectedRoom) {
+                $('#roomSelect').val(selectedRoom).trigger('change');
+            }
+            applyFilters();
+        });
         function applyFilters() {
 
             const type = document.getElementById('filterType').value;

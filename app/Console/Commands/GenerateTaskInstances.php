@@ -32,6 +32,7 @@ class GenerateTaskInstances extends Command
                 ->orderByDesc('date')
                 ->first();
             $lastDate = null;
+
             if(!$lastInstance){
                 if($schedule->start_date){
                     $lastDate = Carbon::parse($schedule->start_date ?? $today);
@@ -59,7 +60,13 @@ class GenerateTaskInstances extends Command
                         break;
                 }
             }
-            
+            if(!$task->stackable){
+                $taskActiveCount = TaskInstance::where('task_id', $task->id)->where('status', 'pending')->count();
+                if($taskActiveCount > 0
+                ){
+                    $shouldGenerate = false;
+                }
+            }
 
             if ($shouldGenerate) {
 

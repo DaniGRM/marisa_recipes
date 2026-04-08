@@ -11,7 +11,8 @@ class Task extends Model
         'description',
         'type',
         'points',
-        'room_id'
+        'room_id',
+        'stackable',
     ];
 
     public function schedule()

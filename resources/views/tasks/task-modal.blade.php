@@ -101,6 +101,20 @@
 
                         </select>
                     </div>
+                    <div class="mb-3 form-check d-flex align-items-center">
+                        <input 
+                            type="checkbox" 
+                            name="stackable" 
+                            value="1" 
+                            class="form-check-input" 
+                            id="taskStackable"
+                            style="height: 24px;width:24px"
+                        >
+
+                        <label class="form-check-label ps-2" for="taskStackable">
+                            Tarea acumulable
+                        </label>
+                    </div>
 
                     <div id="scheduleFields" style="display:none">
 

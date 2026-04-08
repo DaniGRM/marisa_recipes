@@ -20,6 +20,9 @@
         <div class="icon mx-4" onclick="showFilters()">
             <i class="bi bi-filter"></i>
         </div>
+        <div class="icon mx-4" onclick="location.reload()">
+            <i class="bi bi-box-arrow-in-right"></i>
+        </div>
     </div>
 
 </div>

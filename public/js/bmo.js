@@ -381,3 +381,14 @@ function setFilterRoom(room){
 
     document.getElementById("filterText").textContent = room; 
 }
+
+document.addEventListener('keydown', function (e) {
+
+    if (e.key === 'F1') {
+        e.preventDefault(); // evita comportamiento por defecto
+
+        // Hard reload tipo Ctrl+Shift+R
+        window.location.reload(true);
+    }
+
+});

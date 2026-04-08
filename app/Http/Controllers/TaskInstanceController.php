@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Room;
 
 class TaskInstanceController extends Controller
 {
@@ -95,8 +96,8 @@ class TaskInstanceController extends Controller
         $totalPoints = $tasks
             ->where('status','completed')
             ->sum(fn($t) => $t->task->points);
-
-        return view('bmo.index', compact('tasks','totalPoints', 'users', 'currentUser', 'commonTasks', 'taskCompleted'));
+        $rooms = Room::pluck('name');
+        return view('bmo.index', compact('tasks','totalPoints', 'users', 'currentUser', 'commonTasks', 'taskCompleted', 'rooms'));
     }
 
 }

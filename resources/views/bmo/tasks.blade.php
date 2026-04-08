@@ -2,7 +2,7 @@
 
     @foreach($tasks as $task)
 
-        <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}" @if($task->status ==='pending') onclick="completeTaskConfirm({{ $task->task->id }})" @endif>
+        <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}" @if($task->status ==='pending') onclick="completeTaskConfirm({{ $task->task->id }})" @endif data-room="{{ $task->task->room->name ?? '' }}">
 
             <span>
                 {{ $task->task->name }}
@@ -21,9 +21,13 @@
                     {{ $task->completedBy->name }}
                 </span>
             @endif
-            <div class="points d-flex">
-                <span class="px-3 btn-background"> {{ $task->task->points }}</span>
+            <div class="task-btn-container">
+                <img src="icons/washin.png" alt="" style="height: 100px">
+                <div class="points d-flex">
+                    <span class="px-3 btn-background"> {{ $task->task->points }}</span>
+                </div>
             </div>
+            
         </div>
 
     @endforeach

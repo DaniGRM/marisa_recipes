@@ -23,7 +23,7 @@ const screensaver = document.getElementById('screensaver');
 const user_card_screen = document.getElementById('user-card-screen');
 const app = document.getElementById('app');
 const user_select = document.getElementById('user-select');
-
+let filterRoom = null;
 function activarApp() {
     screensaver.style.display = 'none';
     
@@ -228,6 +228,18 @@ function showLoader() {
 
     loader.classList.add('active');
 }
+
+function showFilters(){
+    const filters = document.getElementById('task-filter');
+    filters.style.display = 'flex';
+    app.style.display = 'none';
+}
+
+function hideFilters(){
+    const filters = document.getElementById('task-filter');
+    filters.style.display = 'none';
+    app.style.display = 'flex';
+}
 function hideLoader() {
     const loader = document.getElementById('bmo-loader');
     if (loader) {
@@ -335,4 +347,37 @@ function closeCard(){
     overlay.style.display = 'none';
     // Resetear screens
     document.getElementById('user-card-info-screen').classList.remove('active');
+}
+
+function setFilterRoom(room){
+
+    if(filterRoom === room){
+        hideFilters();
+        filterRoom = null;
+        const allitems = document.querySelectorAll('[data-room]');
+        allitems.forEach(i => {
+            i.style.display = 'flex';
+        });
+        const othersBtn = document.querySelectorAll('[data-sroom]');
+        othersBtn.forEach(b => b.classList.remove('active'));
+        document.getElementById("filterText").textContent = ""; 
+        return;
+    }
+    const notitems = document.querySelectorAll('[data-room]:not([data-room="' + room + '"])');
+    notitems.forEach(i => {
+        i.style.display = 'none';
+    });
+    const items = document.querySelectorAll('[data-room="' + room + '"]');
+    items.forEach(i => {
+        i.style.display = 'flex';
+    });
+
+    const selectedBtn = document.querySelectorAll('[data-sroom="' + room + '"]');
+    const othersBtn = document.querySelectorAll('[data-sroom]:not([data-sroom="' + room + '"])');
+    selectedBtn.forEach(b => b.classList.add('active'));
+    othersBtn.forEach(b => b.classList.remove('active'));
+    filterRoom = room;
+    hideFilters();
+
+    document.getElementById("filterText").textContent = room; 
 }

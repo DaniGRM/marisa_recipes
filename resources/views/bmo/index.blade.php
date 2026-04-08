@@ -32,6 +32,9 @@
     @include('bmo.confirm')
     @include('bmo.loader')
     @include('bmo.card-screen')
+    <div id="task-filter" class="bmo-view" style="display:none;">
+        @include('bmo.filters', ['rooms'])
+    </div>
 </body>
 <script>
     let taskCompleted = @json($taskCompleted ?? null);

@@ -2,6 +2,8 @@
 
     <div class="title">
         HOY
+        <span id="filterText">
+        </span>
     </div>
 
     <div class="nav-icons">
@@ -15,7 +17,9 @@
         <div class="icon mx-4" data-view="common-tasks">
             <i class="bi bi-lightning"></i>
         </div>
-
+        <div class="icon mx-4" onclick="showFilters()">
+            <i class="bi bi-filter"></i>
+        </div>
     </div>
 
 </div>

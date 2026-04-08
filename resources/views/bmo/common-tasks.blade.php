@@ -6,7 +6,7 @@
             @csrf
             <input type="hidden" name="user" id="user{{ $task->id }}" value="{{$currentUser }}">
         </form>
-        <div class="common-task" onclick="completeCommonTaskConfirm({{ $task->id }})">
+        <div class="common-task" onclick="completeCommonTaskConfirm({{ $task->id }})" data-room="{{ $task->room->name ?? '' }}">
             <span>
                 {{ $task->name }}
             </span>

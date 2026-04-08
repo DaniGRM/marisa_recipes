@@ -48,10 +48,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow:   -15px 0 0 0 black,
-                 15px 0 0 0 black,
-                 0 -15px 0 0 black,
-                 0 15px 0 0 black;
 }
 .confirm-button{
     background: #1b4332;
@@ -426,4 +422,24 @@ body {
     text-align: center;
     width: 210px;
     height: 74px;
+}
+
+.task-btn-container{
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.filter-item{
+    border: 5px solid #000;
+    border-radius: 1rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    background: #b9fbc0;
+}
+
+.filter-item.active{
+    background: #1b4332;
+    color: white;
 }

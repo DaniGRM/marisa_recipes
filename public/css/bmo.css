@@ -1,14 +1,12 @@
 body {
     margin: 0;
     font-family: 'Press Start 2P', 'Poppins', sans-serif;
-    /* background: #8bd3a6; */
+    background: #8bd3a6;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: none;
-    background-image: url('/FONDO.png');
-    background-size: cover;
+    cursor: none;    
 }
 
 .screen {

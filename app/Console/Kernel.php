@@ -9,7 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('task:generate')->everyMinute();
+        // $schedule->command('task:generate')->everyMinute();
     }
 
     protected function commands(): void

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BMOController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\RecipeController;
@@ -40,7 +41,7 @@ Route::middleware(['system.bmo','user.selected'])->group(function () {
 });
 Route::prefix('bmo')->name('bmo.')->group(function () {
 
-    Route::get('/', [TaskInstanceController::class,'todayBmo'])->name('bmo');
+    Route::get('/', [BMOController::class,'bmo'])->name('bmo');
 
     Route::post('/tasks/{task}/complete', [TaskInstanceController::class,'complete'])
         ->name('tasks.complete');

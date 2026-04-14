@@ -26,52 +26,35 @@ class GenerateTaskInstances extends Command
 
             if (!$schedule) continue;
 
-            if($schedule->start_date && $schedule->start_date > $today) continue;
-            // Última vez que se generó
-            $lastInstance = TaskInstance::where('task_id', $task->id)
-                ->orderByDesc('date')
-                ->first();
-            $lastDate = null;
+            // Calcular la fecha de inicio del período actual
+            $periodStartDate = $this->getPeriodStartDate($today, $schedule);
 
-            if(!$lastInstance){
-                if($schedule->start_date){
-                    $lastDate = Carbon::parse($schedule->start_date ?? $today);
-                }
-            }else{
-                $lastDate = Carbon::parse($lastInstance->date);
+            // Contar instancias generadas en el período actual
+            $query = TaskInstance::where('task_id', $task->id);
+
+            if ($task->stackable) {
+                // Para stackable: contar por fecha de generación
+                $instancesInPeriod = $query->whereBetween('date', [$periodStartDate, $today])->count();
+            } else {
+                // Para no stackable: contar por fecha de completación
+                $instancesInPeriod = $query->whereBetween('completed_at', [$periodStartDate, $today->endOfDay()])->count();
             }
-            // Calcular diferencia según frecuencia
-            $shouldGenerate = false;
-            if(!$lastDate){
-                $shouldGenerate = true;
-            }else{
-                switch ($schedule->frequency) {
 
-                    case 'daily':
-                        $shouldGenerate = $lastDate->diffInDays($today) >= $schedule->every_n_units;
-                        break;
+            // Calcular cuántas instancias se deben generar
+            $instancesToGenerate = max(0, $schedule->times - $instancesInPeriod);
 
-                    case 'weekly':
-                        $shouldGenerate = $lastDate->diffInWeeks($today) >= $schedule->every_n_units;
-                        break;
-
-                    case 'monthly':
-                        $shouldGenerate = $lastDate->diffInMonths($today) >= $schedule->every_n_units;
-                        break;
-                }
-            }
-            if(!$task->stackable){
+            // Para tareas no apilables, verificar si hay instancias pendientes
+            if (!$task->stackable) {
                 $taskActiveCount = TaskInstance::where('task_id', $task->id)->where('status', 'pending')->count();
-                if($taskActiveCount > 0
-                ){
-                    $shouldGenerate = false;
+                if ($taskActiveCount > 0) {
+                    $instancesToGenerate = 0;
                 }
             }
 
-            if ($shouldGenerate) {
+            if ($instancesToGenerate > 0) {
 
-                // Generar tantas veces como "times"
-                for ($i = 0; $i < $schedule->times; $i++) {
+                // Generar las instancias necesarias
+                for ($i = 0; $i < $instancesToGenerate; $i++) {
 
                     TaskInstance::create([
                         'task_id' => $task->id,
@@ -81,10 +64,38 @@ class GenerateTaskInstances extends Command
 
                 }
 
-                $this->info("Generadas {$schedule->times} instancias para tarea {$task->name}");
+                $this->info("Generadas {$instancesToGenerate} instancias para tarea {$task->name}");
             }
         }
 
         return 0;
+    }
+
+    /**
+     * Calcula la fecha de inicio del período actual basándose en la frecuencia
+     * 
+     * @param Carbon $today
+     * @param TaskSchedule $schedule
+     * @return Carbon
+     */
+    private function getPeriodStartDate(Carbon $today, $schedule)
+    {
+        $startDate = $today->copy();
+
+        switch ($schedule->frequency) {
+            case 'daily':
+                $startDate->subDays($schedule->every_n_units - 1);
+                break;
+
+            case 'weekly':
+                $startDate->subWeeks($schedule->every_n_units - 1);
+                break;
+
+            case 'monthly':
+                $startDate->subMonths($schedule->every_n_units - 1);
+                break;
+        }
+
+        return $startDate;
     }
 }

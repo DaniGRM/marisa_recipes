@@ -42,7 +42,7 @@ class BMOController extends Controller
         $totalPoints = $tasks
             ->where('status','completed')
             ->sum(fn($t) => $t->task->points);
-        $rooms = Room::pluck('name');
+        $rooms = Room::all();
         return view('bmo2.index', compact('tasks','totalPoints', 'users', 'currentUser', 'commonTasks', 'taskCompleted', 'rooms'));
     }
 

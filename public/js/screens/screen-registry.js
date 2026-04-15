@@ -15,6 +15,12 @@ const screenRegistry = {
     },
     welcome: {
         showHeader: false
+    },
+    filter: {
+        showHeader: true
+    },
+    confirm: {
+        showHeader: false
     }
 };
 

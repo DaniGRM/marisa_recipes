@@ -6,6 +6,7 @@
 class BMOSystem {
     constructor() {
         this.currentScreen = null;
+        this.filterRoom = null;
         this.screens = {};
         this.init();
     }
@@ -48,6 +49,109 @@ class BMOSystem {
     
         bmo.selectedUser = id;
         this.loadScreen('tasks');
+        this.updateUserIcon();
+    }
+
+    updateUserIcon(){
+        const userIconImgs = document.querySelectorAll('.current-user-icon');
+
+        if (userIconImgs.length === 0) return;
+
+        userIconImgs.forEach(userIconImg => {
+            if (bmo.selectedUser == 1) {
+                userIconImg.src = 'icons/header/bmo.png';
+            } else if (bmo.selectedUser == 2) {
+                userIconImg.src = 'icons/header/bma.png';
+            } else {
+                userIconImg.src = ''; // Ningún usuario
+            }
+        });
+    }
+
+    setFilterRoom(room){
+        console.log("Filtrando por habitación:", room);
+        if(this.filterRoom === room){
+
+            console.log("Quitando filtro de habitación");
+            this.filterRoom = null;
+            const allitems = document.querySelectorAll('[data-room]');
+            allitems.forEach(i => {
+                i.style.display = 'flex';
+            });
+            const othersBtn = document.querySelectorAll('[data-sroom]');
+            othersBtn.forEach(b => b.classList.remove('active'));
+            const filterIconImgs = document.querySelectorAll('.filterIcon');
+
+            if (filterIconImgs.length === 0) return;
+
+            filterIconImgs.forEach(filterIconImg => {
+                    filterIconImg.style.display = 'none';
+                    filterIconImg.src = '';
+            });
+            return;
+        }
+        const notitems = document.querySelectorAll('[data-room]:not([data-room="' + room + '"])');
+        notitems.forEach(i => {
+            i.style.display = 'none';
+        });
+        const items = document.querySelectorAll('[data-room="' + room + '"]');
+        items.forEach(i => {
+            i.style.display = 'flex';
+        });
+        const selectedBtn = document.querySelectorAll('[data-sroom="' + room + '"]');
+        const othersBtn = document.querySelectorAll('[data-sroom]:not([data-sroom="' + room + '"])');
+        selectedBtn.forEach(b => b.classList.add('active'));
+        othersBtn.forEach(b => b.classList.remove('active'));
+        this.filterRoom = room;
+        let filterIcon = document.querySelector('[data-room="' + room + '"] img');
+
+        const filterIconImgs = document.querySelectorAll('.filterIcon');
+
+        if (filterIconImgs.length === 0) return;
+
+        filterIconImgs.forEach(filterIconImg => {
+            if(filterIcon.src){
+                filterIconImg.style.display = 'block';
+                filterIconImg.src = filterIcon.src;
+            }else{
+                filterIconImg.style.display = 'none';
+                filterIconImg.src = '';
+            }
+        });
+    }
+
+    completeTaskConfirm(taskId, taskDescription = '', isCommon = false) {
+        this.loadScreen('confirm'); // Pantalla inicial
+        const btn = document.getElementById('confirmTaskBtn');
+        btn.dataset['task'] = taskId;
+        btn.dataset['common'] = isCommon;
+        const message = document.getElementById('taskDescription');
+        message.textContent = taskDescription || '';
+    }
+
+    completeTask() {
+        const btn = document.getElementById('confirmTaskBtn');
+        let taskId = btn.dataset['task'];
+        let isCommon = btn.dataset['common'];
+        const user = document.getElementById('user' + taskId);
+        let form = document.getElementById('formTask' + taskId);
+
+        if(isCommon == 'true'){
+            form = document.getElementById('formCommonTask' + taskId);
+        }
+        user.value = bmo.selectedUser;
+        form.submit();
+    }
+
+    cancelCompleteTask(){
+        const btn = document.getElementById('confirmTaskBtn');
+        let isCommon = btn.dataset['common'];
+        console.log("Cancelando tarea. Es común?", isCommon);
+        if(isCommon == 'true'){
+            this.loadScreen('common_tasks');
+        }else{
+            this.loadScreen('tasks');
+        }
     }
 }
 

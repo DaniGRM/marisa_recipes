@@ -24,30 +24,12 @@
         <div class="bmo-content-container">
             <div id="bmo-content" class="bmo-content">
                 <!-- Las pantallas se cargarán aquí dinámicamente -->
-
-                <!-- Pantalla de inicio -->
-                <div class="bmo-screen" data-screen="welcome">
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <h1>Bienvenido a BMO</h1>
-                    <!-- contenido -->
-                </div>
-                @include('bmo2.tasks')
-                @include('bmo2.common_tasks')
-                @include('bmo2.user-select')
+                
+                @include('bmo2.screens.tasks')
+                @include('bmo2.screens.common_tasks')
+                @include('bmo2.screens.user-select')
+                @include('bmo2.screens.filter')
+                @include('bmo2.screens.confirm')
             </div>
         </div>
     </div>

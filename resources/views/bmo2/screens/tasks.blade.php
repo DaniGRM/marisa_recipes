@@ -5,7 +5,7 @@
 
         @foreach($tasks as $task)
 
-            <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}" @if($task->status ==='pending') onclick="completeTaskConfirm({{ $task->task->id }})" @endif data-room="{{ $task->task->room->name ?? '' }}">
+            <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}" @if($task->status ==='pending') onclick="bmoApp.completeTaskConfirm({{ $task->task->id }}, '{{ $task->task->description }}', false)" @endif data-room="{{ $task->task->room->name ?? '' }}">
 
                 <span>
                     {{ $task->task->name }}
@@ -20,12 +20,10 @@
                     </form>
 
                 @else
-                    <span>
-                        {{ $task->completedBy->name }}
-                    </span>
+                    <img class="me-5" @if($task->completedBy->id == 1) src="icons/header/bmo.png" @else src="" @endif></img>
                 @endif
                 <div class="task-btn-container">
-                    <img src="icons/LAUNDRY-ICON.png" alt="" style="height: 100px">
+                    <img src="{{ $task->task->room->icon_path }}" alt="" style="height: 100px">
                     <div class="points d-flex">
                         <span class="px-3 btn-background"> {{ $task->task->points }}</span>
                     </div>

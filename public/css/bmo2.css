@@ -220,6 +220,12 @@ body {
     gap: 15px;
 }
 
+.task-btn-container.commons{
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
 .task-btn-container img {
     height: 60px;
     width: auto;

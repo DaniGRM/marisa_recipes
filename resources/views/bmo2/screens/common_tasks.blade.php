@@ -18,7 +18,7 @@
                 </form>
 
                 
-                <div class="task-btn-container">
+                <div class="task-btn-container commons">
                     <img src="{{ $task->room->icon_path }}" alt="" style="height: 100px">
                     <div class="points d-flex">
                         <span class="px-3 btn-background ms-5"> {{ $task->points }}</span>

@@ -14,88 +14,107 @@ class GenerateTaskInstances extends Command
 
     public function handle()
     {
-        $today = Carbon::today();
-
+        $now = Carbon::now();
+        $this->info("Ejecutando generación de tareas para fecha: {$now->toDateTimeString()}");
         $tasks = Task::with('schedule')
             ->where('type', 'frequency')
             ->get();
 
         foreach ($tasks as $task) {
-
             $schedule = $task->schedule;
-
             if (!$schedule) continue;
 
-            // Calcular la fecha de inicio del período actual
-            $periodStartDate = $this->getPeriodStartDate($today, $schedule);
-
-            // Contar instancias generadas en el período actual
-            $query = TaskInstance::where('task_id', $task->id);
-
             if ($task->stackable) {
-                // Para stackable: contar por fecha de generación
-                $instancesInPeriod = $query->whereBetween('date', [$periodStartDate, $today])->count();
+                $this->handleStackable($task, $schedule, $now);
             } else {
-                // Para no stackable: contar por fecha de completación
-                $instancesInPeriod = $query->whereBetween('completed_at', [$periodStartDate, $today->endOfDay()])->count();
-            }
-
-            // Calcular cuántas instancias se deben generar
-            $instancesToGenerate = max(0, $schedule->times - $instancesInPeriod);
-
-            // Para tareas no apilables, verificar si hay instancias pendientes
-            if (!$task->stackable) {
-                $taskActiveCount = TaskInstance::where('task_id', $task->id)->where('status', 'pending')->count();
-                if ($taskActiveCount > 0) {
-                    $instancesToGenerate = 0;
-                }
-            }
-
-            if ($instancesToGenerate > 0) {
-
-                // Generar las instancias necesarias
-                for ($i = 0; $i < $instancesToGenerate; $i++) {
-
-                    TaskInstance::create([
-                        'task_id' => $task->id,
-                        'date' => $today,
-                        'status' => 'pending'
-                    ]);
-
-                }
-
-                $this->info("Generadas {$instancesToGenerate} instancias para tarea {$task->name}");
+                $this->handleNonStackable($task, $schedule, $now);
             }
         }
 
         return 0;
     }
 
-    /**
-     * Calcula la fecha de inicio del período actual basándose en la frecuencia
-     * 
-     * @param Carbon $today
-     * @param TaskSchedule $schedule
-     * @return Carbon
-     */
-    private function getPeriodStartDate(Carbon $today, $schedule)
+    private function handleStackable($task, $schedule, $now)
     {
-        $startDate = $today->copy();
+        $lastInstance = TaskInstance::where('task_id', $task->id)
+            ->orderByDesc('date')
+            ->first();
 
-        switch ($schedule->frequency) {
-            case 'daily':
-                $startDate->subDays($schedule->every_n_units - 1);
-                break;
+        $shouldGenerate = false;
 
-            case 'weekly':
-                $startDate->subWeeks($schedule->every_n_units - 1);
-                break;
-
-            case 'monthly':
-                $startDate->subMonths($schedule->every_n_units - 1);
-                break;
+        if (!$lastInstance) {
+            $shouldGenerate = true;
+        } else {
+            $lastDate = Carbon::parse($lastInstance->date);
+            
+            switch ($schedule->frequency) {
+                case 'daily':
+                    $shouldGenerate = $lastDate->diffInDays($now) >= $schedule->every_n_units;
+                    break;
+                case 'weekly':
+                    $shouldGenerate = $lastDate->diffInWeeks($now) >= $schedule->every_n_units;
+                    break;
+                case 'monthly':
+                    $shouldGenerate = $lastDate->diffInMonths($now) >= $schedule->every_n_units;
+                    break;
+            }
         }
 
-        return $startDate;
+        if ($shouldGenerate) {
+            for ($i = 0; $i < $schedule->times; $i++) {
+                TaskInstance::create([
+                    'task_id' => $task->id,
+                    'date' => $now,
+                    'status' => 'pending'
+                ]);
+            }
+            $this->info("Generadas {$schedule->times} instancias para tarea {$task->name}");
+        }
+    }
+
+    private function handleNonStackable($task, $schedule, $now)
+    {
+        $pendingCount = TaskInstance::where('task_id', $task->id)
+            ->where('status', 'pending')
+            ->count();
+
+        if ($pendingCount > 0) {
+            return;
+        }
+
+        $lastCompleted = TaskInstance::where('task_id', $task->id)
+            ->where('status', 'completed')
+            ->orderByDesc('completed_at')
+            ->first();
+
+        $shouldGenerate = false;
+
+        if (!$lastCompleted) {
+            $shouldGenerate = true;
+        } else {
+            $completedDate = Carbon::parse($lastCompleted->completed_at);
+            $this->info("Tarea: {$task->name},Ahora: {$now->toDateTimeString()}, Última completada: {$completedDate->toDateTimeString()}");
+            // Convertir every_n_units a horas según la frecuencia
+            $unitsInHours = match($schedule->frequency) {
+                'daily' => $schedule->every_n_units * 24,
+                'weekly' => $schedule->every_n_units * 24 * 7,
+                'monthly' => $schedule->every_n_units * 24 * 30,
+                default => 0,
+            };
+
+            $intervalHours = $unitsInHours / $schedule->times;
+            $hoursPassed = $completedDate->diffInHours($now);
+            $this->info("Tarea: {$task->name}, Horas desde última completada: {$hoursPassed}, Intervalo requerido: {$intervalHours}");
+            $shouldGenerate = $hoursPassed >= $intervalHours;
+        }
+
+        if ($shouldGenerate) {
+            TaskInstance::create([
+                'task_id' => $task->id,
+                'date' => $now,
+                'status' => 'pending'
+            ]);
+            $this->info("Generada 1 instancia para tarea {$task->name}");
+        }
     }
 }

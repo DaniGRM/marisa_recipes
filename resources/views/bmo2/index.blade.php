@@ -22,7 +22,7 @@
         
         <!-- Contenedor de contenido escalable -->
         <div class="bmo-content-container">
-            <div id="bmo-content" class="bmo-content">
+            <div id="bmo-content" class="bmo-content h-100">
                 <!-- Las pantallas se cargarán aquí dinámicamente -->
                 
                 @include('bmo2.screens.tasks')

@@ -1,6 +1,6 @@
     <div class="bmo-screen" data-screen="filter">
     @include('bmo2.components.header')
-    <div class="row">
+    <div class="row" style="padding-bottom: 100px;">
         @foreach($rooms as $room )
             <div class="col-3 p-4">
                 <div class="filter-item text-center" onclick="bmoApp.setFilterRoom('{!! $room->name !!}')" data-sroom="{{ $room->name }}">

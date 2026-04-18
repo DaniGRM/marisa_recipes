@@ -21,6 +21,9 @@ const screenRegistry = {
     },
     confirm: {
         showHeader: false
+    },
+    loader: {
+        showHeader: false
     }
 };
 

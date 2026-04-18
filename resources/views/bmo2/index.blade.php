@@ -30,6 +30,7 @@
                 @include('bmo2.screens.user-select')
                 @include('bmo2.screens.filter')
                 @include('bmo2.screens.confirm')
+                @include('bmo2.screens.loader')
             </div>
         </div>
         @include('bmo2.screens.screensaver')

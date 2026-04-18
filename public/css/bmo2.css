@@ -378,3 +378,35 @@ body {
 .bmo-message h1{
     margin-bottom:20px;
 }
+
+
+.loader-content {
+    text-align: center;
+    color: #000;
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+}
+
+.spinner {
+        width: 120px;
+    height: 120px;
+    border: 16px solid rgba(0,0,0);
+    border-top: 16px solid #c6e1d0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loader-text {
+    font-size: 3rem;
+    letter-spacing: 2px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

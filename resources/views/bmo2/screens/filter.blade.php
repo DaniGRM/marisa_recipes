@@ -1,4 +1,4 @@
-    <div class="bmo-screen" data-screen="filter">
+<div class="bmo-screen" data-screen="filter">
     @include('bmo2.components.header')
     <div class="row" style="padding-bottom: 100px;">
         @foreach($rooms as $room )

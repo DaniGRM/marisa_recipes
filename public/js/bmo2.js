@@ -10,7 +10,14 @@ class BMOSystem {
         this.screens = {};
         this.init();
         this.timeout = null
-        
+        this.messages = [
+            "Procesando...",
+            "Cocinando magia...",
+            "Sumando puntos...",
+            "BMO está feliz :)",
+            "Ole la limpieza :O",
+            "Puntitos, puntitos ricos"
+        ];
     }
 
     init() {
@@ -68,6 +75,16 @@ class BMOSystem {
         this.loadScreen('tasks');
         this.updateUserIcon();
     }
+
+    
+
+    showLoader() {
+        const text = document.querySelector('.loader-text');
+
+        text.innerText = this.messages[Math.floor(Math.random() * this.messages.length)];
+        this.loadScreen('loader');
+    }
+
 
     updateUserIcon(){
         const userIconImgs = document.querySelectorAll('.current-user-icon');
@@ -147,6 +164,7 @@ class BMOSystem {
     }
 
     completeTask() {
+        this.showLoader();
         const btn = document.getElementById('confirmTaskBtn');
         let taskId = btn.dataset['task'];
         let isCommon = btn.dataset['common'];

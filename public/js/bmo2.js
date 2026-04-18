@@ -9,13 +9,24 @@ class BMOSystem {
         this.filterRoom = null;
         this.screens = {};
         this.init();
+        this.timeout = null
+        
     }
 
     init() {
         // Aquí cargarán las pantallas
         this.loadScreen('select-user'); // Pantalla inicial
+        
     }
 
+    resetTimer() {
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+            document.getElementById('screensaver').style.display = 'flex';
+            document.getElementById('bmo-content-container').style.display = 'none';
+            
+        }, 60000); // 60 segundos
+    }
     /**
      * Carga una pantalla dinámicamente
      * @param {string} screenName - Nombre de la pantalla
@@ -38,6 +49,12 @@ class BMOSystem {
             }
         } else {
             console.error(`Pantalla "${screenName}" no encontrada`);
+        }
+
+        if(screenName == 'screensaver'){
+            document.getElementById('bmo-content-container').style.display = 'none';
+        }else{
+            document.getElementById('bmo-content-container').style.display = 'block'    ;
         }
     }
 
@@ -159,3 +176,20 @@ class BMOSystem {
 
 // Instancia global
 const bmoApp = new BMOSystem();
+
+document.getElementById('screensaver').addEventListener('click', (e) => {
+    e.stopPropagation(); // evita que el click se propague a elementos debajo
+    e.preventDefault();  // evita acciones por defecto si hubiera
+    location.reload();
+});
+document.addEventListener('click', function(e){
+    if(!screensaver.contains(e.target)){
+        bmoApp.resetTimer();
+    }
+});
+document.addEventListener('touchstart', function(e){
+    if(!screensaver.contains(e.target)){
+        bmoApp.resetTimer();
+    }
+});
+bmoApp.resetTimer();

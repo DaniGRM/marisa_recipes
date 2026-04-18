@@ -21,7 +21,7 @@
         <div class="bmo-frame"></div>
         
         <!-- Contenedor de contenido escalable -->
-        <div class="bmo-content-container">
+        <div id="bmo-content-container" class="bmo-content-container">
             <div id="bmo-content" class="bmo-content h-100">
                 <!-- Las pantallas se cargarán aquí dinámicamente -->
                 
@@ -32,6 +32,8 @@
                 @include('bmo2.screens.confirm')
             </div>
         </div>
+        @include('bmo2.screens.screensaver')
+
     </div>
 
     <!-- Variables globales -->

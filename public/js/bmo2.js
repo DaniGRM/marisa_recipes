@@ -33,7 +33,7 @@ class BMOSystem {
         if (bmo.currentUser !== '0') {
             this.setUser(bmo.currentUser);
         }
-        
+
         if (bmo.taskCompleted) {
             this.showTaskCompleted();
         }
@@ -153,7 +153,7 @@ class BMOSystem {
         selectedBtn.forEach(b => b.classList.add('active'));
         othersBtn.forEach(b => b.classList.remove('active'));
         this.filterRoom = room;
-        let filterIcon = document.querySelector('[data-room="' + room + '"] img');
+        let filterIcon = document.querySelector('[data-sroom="' + room + '"] img');
 
         const filterIconImgs = document.querySelectorAll('.filterIcon');
 

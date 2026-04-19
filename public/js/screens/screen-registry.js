@@ -24,6 +24,9 @@ const screenRegistry = {
     },
     loader: {
         showHeader: false
+    },
+    dni: {
+        showHeader: false
     }
 };
 

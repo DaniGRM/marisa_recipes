@@ -32,6 +32,7 @@
                 @include('bmo2.screens.confirm')
                 @include('bmo2.screens.loader')
                 @include('bmo2.screens.task-completed')
+                @include('bmo2.screens.dni')
             </div>
         </div>
         @include('bmo2.screens.screensaver')

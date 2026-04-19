@@ -31,6 +31,7 @@
                 @include('bmo2.screens.filter')
                 @include('bmo2.screens.confirm')
                 @include('bmo2.screens.loader')
+                @include('bmo2.screens.task-completed')
             </div>
         </div>
         @include('bmo2.screens.screensaver')

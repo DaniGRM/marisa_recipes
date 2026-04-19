@@ -23,6 +23,22 @@ class BMOSystem {
     init() {
         // Aquí cargarán las pantallas
         this.loadScreen('select-user'); // Pantalla inicial
+        const video = document.getElementById('bmoVideo');
+
+        // Esperar a que el vídeo tenga datos suficientes
+        video.addEventListener('canplaythrough', function () {
+            video.play().catch(() => { });
+        });
+
+        if (bmo.currentUser !== '0') {
+            this.setUser(bmo.currentUser);
+        }
+        
+        if (bmo.taskCompleted) {
+            this.showTaskCompleted();
+        }
+
+        
         
     }
 
@@ -187,6 +203,70 @@ class BMOSystem {
         }else{
             this.loadScreen('tasks');
         }
+    }
+
+    showTaskCompleted() {
+        this.loadScreen('task-completed');
+
+        // Actualizar datos dinámicos
+        const nameElement = document.getElementById('completedTaskName');
+        const pointsElement = document.getElementById('completedTaskPoints');
+        
+        if (nameElement) nameElement.textContent = bmo.taskCompleted.task.name;
+        if (pointsElement) pointsElement.textContent = bmo.taskCompleted.task.points;
+
+        const imageScreen = document.querySelector('[data-screen="task-completed"] .task-completed-image-screen');
+        const textScreen = document.querySelector('[data-screen="task-completed"] .task-completed-text-screen');
+
+        // Mostrar imagen primero
+        if (imageScreen) imageScreen.style.display = 'block';
+        if (textScreen) textScreen.style.display = 'none';
+
+        // Después de 3s → texto y confetti
+        setTimeout(() => {
+            if (imageScreen) imageScreen.style.display = 'none';
+            if (textScreen) textScreen.style.display = 'block';
+            this.launchConfetti();
+        }, 3000);
+
+        // Después de 6s → volver a app
+        setTimeout(() => {
+            this.loadScreen('tasks');
+        }, 6000);
+    }
+
+    launchConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+
+        canvas.style.display = 'block';
+
+        const myConfetti = confetti.create(canvas, { resize: true });
+
+        const duration = 2000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+            myConfetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 }
+            });
+
+            myConfetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 }
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            } else {
+                canvas.style.display = 'none';
+            }
+        })();
     }
 }
 

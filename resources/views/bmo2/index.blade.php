@@ -55,6 +55,7 @@
     
     <!-- Scripts del proyecto -->
     <script src="{{ asset('js/screens/screen-registry.js') }}"></script>
+    <script src="{{ asset('js/screens/card-dni.js') }}"></script>
     <script src="{{ asset('js/bmo2.js') }}"></script>
 </body>
 

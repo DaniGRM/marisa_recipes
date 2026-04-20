@@ -70,6 +70,11 @@ class BMOSystem {
             if (typeof updateHeaderVisibility === 'function') {
                 updateHeaderVisibility(screenName);
             }
+
+            // Si es la pantalla 'dni', rellena los datos del usuario
+            if (screenName === 'dni') {
+                this.showUserCard();
+            }
         } else {
             console.error(`Pantalla "${screenName}" no encontrada`);
         }
@@ -116,6 +121,41 @@ class BMOSystem {
                 userIconImg.src = ''; // Ningún usuario
             }
         });
+    }
+
+    /**
+     * Rellena los datos de la tarjeta del usuario
+     */
+    showUserCard() {
+        // Obtener el usuario actual
+        const currentUser = bmo.users[bmo.selectedUser - 1];
+        
+        if (!currentUser) {
+            console.warn('Usuario no encontrado');
+            return;
+        }
+
+        // Rellenar nombre
+        const nameElement = document.querySelector('.bmo-dni-name span');
+        if (nameElement) {
+            nameElement.textContent = currentUser.name;
+        }
+
+        // Rellenar puntos (preservando la imagen)
+        const pointsElement = document.querySelector('.bmo-dni-points');
+        if (pointsElement) {
+            pointsElement.innerHTML = `<img style="margin-bottom: 18px;" src="/card/coin.png" alt="Coin Icon"> ${currentUser.current_month_points}`;
+        }
+
+        const charmElement = document.querySelector('.bmo-dni-charm');
+        if (charmElement) {
+            charmElement.src = currentUser.id == 1 ? '/card/bmo-charm.png' : '/card/bma-charm.png';
+        }
+
+        const dniImgElement = document.querySelector('.bmo-dni-img');
+        if (dniImgElement) {
+            dniImgElement.src = currentUser.id == 1 ? '/card/dni-bmo.png' : '/card/dni-bma.png';
+        }
     }
 
     setFilterRoom(room){

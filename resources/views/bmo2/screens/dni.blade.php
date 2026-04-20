@@ -103,8 +103,8 @@
         <div class="bmo-dni">
             <div class="container-fluid w-100 h-100">
                 
-                <img class="bmo-dni-charm" @if($dniUser->id == 1) src="/card/bmo-charm.png" @else src="/card/bma-charm.png" @endif alt="DNI Icon">
-                <img class="bmo-dni-img" @if($dniUser->id == 1) src="/card/dni-bmo.png" @else src="/card/dni-bma.png" @endif alt="DNI Icon">
+                <img id="dniCharm" class="bmo-dni-charm" alt="DNI Charm">
+                <img id="dniImg" class="bmo-dni-img"  alt="DNI Icon">
             
                 <div class="bmo-dni-name">
                     <span>{{ $dniUser->name }}</span>

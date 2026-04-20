@@ -95,6 +95,20 @@ class BMOSystem {
     setUser(id) {
     
         bmo.selectedUser = id;
+        
+        // Obtener el filtro del usuario seleccionado desde el array de filtros
+        const userFilter = bmo.userFilters[id] || null;
+        
+        // Inicializar el filtro manager con el filtro de ese usuario
+        filterManager.init(userFilter);
+        
+        // Si hay un filtro guardado para este usuario, aplicarlo
+        if (userFilter) {
+            filterManager.applyFilterUI(userFilter);
+        } else {
+            filterManager.clearFilterUI();
+        }
+        
         this.loadScreen('tasks');
         this.updateUserIcon();
     }
@@ -127,54 +141,19 @@ class BMOSystem {
 
     setFilterRoom(room){
         console.log("Filtrando por habitación:", room);
-        if(this.filterRoom === room){
-
-            console.log("Quitando filtro de habitación");
-            this.filterRoom = null;
-            const allitems = document.querySelectorAll('[data-room]');
-            allitems.forEach(i => {
-                i.style.display = 'flex';
-            });
-            const othersBtn = document.querySelectorAll('[data-sroom]');
-            othersBtn.forEach(b => b.classList.remove('active'));
-            const filterIconImgs = document.querySelectorAll('.filterIcon');
-
-            if (filterIconImgs.length === 0) return;
-
-            filterIconImgs.forEach(filterIconImg => {
-                    filterIconImg.style.display = 'none';
-                    filterIconImg.src = '';
-            });
-            return;
+        
+        // Usar filterManager para manejar el filtro
+        filterManager.toggleFilter(room, bmo.selectedUser);
+        
+        // Actualizar la UI según el nuevo estado del filtro
+        if (filterManager.currentFilter) {
+            filterManager.applyFilterUI(filterManager.currentFilter);
+        } else {
+            filterManager.clearFilterUI();
         }
-        const notitems = document.querySelectorAll('[data-room]:not([data-room="' + room + '"])');
-        notitems.forEach(i => {
-            i.style.display = 'none';
-        });
-        const items = document.querySelectorAll('[data-room="' + room + '"]');
-        items.forEach(i => {
-            i.style.display = 'flex';
-        });
-        const selectedBtn = document.querySelectorAll('[data-sroom="' + room + '"]');
-        const othersBtn = document.querySelectorAll('[data-sroom]:not([data-sroom="' + room + '"])');
-        selectedBtn.forEach(b => b.classList.add('active'));
-        othersBtn.forEach(b => b.classList.remove('active'));
-        this.filterRoom = room;
-        let filterIcon = document.querySelector('[data-sroom="' + room + '"] img');
-
-        const filterIconImgs = document.querySelectorAll('.filterIcon');
-
-        if (filterIconImgs.length === 0) return;
-
-        filterIconImgs.forEach(filterIconImg => {
-            if(filterIcon.src){
-                filterIconImg.style.display = 'block';
-                filterIconImg.src = filterIcon.src;
-            }else{
-                filterIconImg.style.display = 'none';
-                filterIconImg.src = '';
-            }
-        });
+        
+        // Actualizar la referencia local del filtro
+        this.filterRoom = filterManager.currentFilter;
     }
 
     completeTaskConfirm(taskId, taskDescription = '', isCommon = false) {

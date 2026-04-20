@@ -46,4 +46,7 @@ Route::prefix('bmo')->name('bmo.')->group(function () {
     Route::post('/tasks/{task}/complete', [TaskInstanceController::class,'complete'])
         ->name('tasks.complete');
 
+    Route::post('/filter', [BMOController::class,'saveFilter'])
+        ->name('filter.save');
+
 });

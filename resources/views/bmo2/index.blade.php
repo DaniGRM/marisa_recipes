@@ -45,7 +45,10 @@
             taskCompleted: @json($taskCompleted ?? null),
             currentUser: '{{ $currentUser }}',
             users: {!! $users->toJson() !!},
-            currentScreen: null
+            currentScreen: null,
+            currentFilter: '{{ $currentFilter }}',
+            userFilters: {!! json_encode($userFilters) !!},
+            csrfToken: '{{ csrf_token() }}'
         };
     </script>
 
@@ -56,6 +59,7 @@
     <!-- Scripts del proyecto -->
     <script src="{{ asset('js/screens/screen-registry.js') }}"></script>
     <script src="{{ asset('js/screens/card-dni.js') }}"></script>
+    <script src="{{ asset('js/screens/filter-manager.js') }}"></script>
     <script src="{{ asset('js/bmo2.js') }}"></script>
 </body>
 

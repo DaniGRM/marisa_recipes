@@ -1,18 +1,12 @@
-/**
- * Sistema de Flip de Tarjeta DNI - Módulo independiente
- * Maneja la lógica de rotación entre front y back de la tarjeta
- */
-
 class CardDNIFlipper {
     constructor() {
         this.isFlipped = false;
         this.cardInner = null;
+        this._clickHandler = null; // Guardar referencia del handler
     }
 
-    /**
-     * Inicializa el flipper cuando se carga la pantalla dni
-     */
     init() {
+        this.isFlipped = false; // Resetear estado al reiniciar
         this.cardInner = document.querySelector('.bmo-dni-card-inner');
         
         if (!this.cardInner) {
@@ -24,73 +18,62 @@ class CardDNIFlipper {
         this.attachEventListeners();
     }
 
-    /**
-     * Adjunta los event listeners a la tarjeta
-     */
     attachEventListeners() {
         const dniScreen = document.querySelector('[data-screen="dni"]');
-        
         if (!dniScreen) return;
 
-        // Agregar listener al contenedor de la tarjeta para click general
-        dniScreen.addEventListener('click', (e) => {
-            // Ignorar click si es en el botón close
-            if (e.target.closest('.bmo-dni-close')) {
-                return;
-            }
+        // Eliminar listener anterior si existe antes de añadir uno nuevo
+        if (this._clickHandler) {
+            dniScreen.removeEventListener('click', this._clickHandler);
+        }
 
-            // Si el click es en la tarjeta, hacer flip
+        // Guardar referencia para poder eliminarlo después
+        this._clickHandler = (e) => {
+            if (e.target.closest('.bmo-dni-close')) return;
+
             if (this.cardInner && this.cardInner.contains(e.target)) {
                 this.toggleFlip();
             }
-        });
+        };
+
+        dniScreen.addEventListener('click', this._clickHandler);
     }
 
-    /**
-     * Alterna el estado de flip de la tarjeta
-     */
     toggleFlip() {
         if (!this.cardInner) return;
 
         this.cardInner.classList.toggle('flipped');
         this.isFlipped = this.cardInner.classList.contains('flipped');
 
-        console.log('Toggle flip:', this.isFlipped);
-
-        // Si se hace flip al back, opcionalmente ejecutar animaciones
         if (this.isFlipped) {
-            setTimeout(() => {
-                this.onBackVisible();
-            }, 300); // Espera a que termine la rotación
+            setTimeout(() => this.onBackVisible(), 300);
         }
     }
 
-    /**
-     * Se ejecuta cuando el back es visible
-     */
     onBackVisible() {
-        // Aquí se pueden agregar animaciones del back si es necesario
         console.log('Back face visible');
     }
 
-    /**
-     * Vuelve a mostrar el front si está flipped
-     */
     showFront() {
-        if (this.isFlipped) {
-            this.toggleFlip();
-        }
+        if (this.isFlipped) this.toggleFlip();
+    }
+
+    showBack() {
+        if (!this.isFlipped) this.toggleFlip();
     }
 
     /**
-     * Vuelve a mostrar el back si está en front
+     * Limpieza al cerrar la card
      */
-    showBack() {
-        if (!this.isFlipped) {
-            this.toggleFlip();
+    destroy() {
+        const dniScreen = document.querySelector('[data-screen="dni"]');
+        if (dniScreen && this._clickHandler) {
+            dniScreen.removeEventListener('click', this._clickHandler);
+            this._clickHandler = null;
         }
+        this.isFlipped = false;
+        this.cardInner = null;
     }
 }
 
-// Instancia global
 const cardDNIFlipper = new CardDNIFlipper();

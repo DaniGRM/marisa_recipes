@@ -96,12 +96,13 @@
         <img id="dniImg" class="bmo-dni-img" alt="DNI Icon">
 
         <div class="bmo-dni-name">
-            <span>{{ $dniUser->name }}</span>
+            <span></span>
         </div>
         <div class="bmo-dni-points-badge">
             <span class="bmo-dni-label">PUNTOS</span>
             <span class="bmo-dni-points"> <img style="margin-bottom: 18px;" src="/card/coin.png" alt="Coin Icon">
-                {{ $dniUser->current_month_points }}</span>
+                
+            </span>
         </div>
 
 

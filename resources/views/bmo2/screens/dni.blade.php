@@ -1,9 +1,5 @@
 <link rel="stylesheet" href="{{ asset('css/bmo-card.css') }}">
-
-@php
-    $dniUser = $users[$currentUser] ?? null;
-    // dd($dniUser);
-@endphp
+    
 <div class="bmo-screen justify-content-center" data-screen="dni">
     <div style="height: 100%; padding: 40px">
         <div class="bmo-dni-card-inner">

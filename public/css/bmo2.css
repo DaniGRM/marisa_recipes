@@ -1,0 +1,412 @@
+/* ===================================
+   RESET Y ESTILOS BASE
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    color: #333;
+    background: #1a1a1a;
+}
+
+/* ===================================
+   ESTRUCTURA PRINCIPAL - MARCO
+   =================================== */
+.bmo-screen-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Marco de fondo */
+.bmo-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/FONDO.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-color: #1a1a1a;
+    z-index: 1;
+    pointer-events: none; /* Permite clicks a través del marco transparente */
+}
+
+/* ===================================
+   CONTENEDOR DE CONTENIDO ESCALABLE
+   =================================== */
+.bmo-content-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    
+    /* Ajusta estos valores según el tamaño de tu marco */
+    padding: 60px 80px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    clip-path: inset(60px 80px 60px 80px);
+}
+
+/* Personalización del scrollbar */
+.bmo-content-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.bmo-content-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.bmo-content-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+}
+
+.bmo-content-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.bmo-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===================================
+   SISTEMA DE PANTALLAS
+   =================================== */
+.bmo-screen {
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    animation: screenFadeIn 0.3s ease-in-out;
+}
+
+.bmo-screen.active {
+    display: flex;
+}
+
+/* Animación suave entre pantallas */
+@keyframes screenFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===================================
+   RESPONSIVE - AJUSTES POR TAMAÑO
+   =================================== */
+@media (max-width: 1920px) {
+    .bmo-content-container {
+        padding: 50px 70px;
+        clip-path: inset(50px 70px 50px 70px);
+    }
+}
+
+@media (max-width: 1440px) {
+    .bmo-content-container {
+        padding: 40px 60px;
+        clip-path: inset(40px 60px 40px 60px);
+    }
+}
+
+@media (max-width: 1024px) {
+    .bmo-content-container {
+        padding: 30px 50px;
+        clip-path: inset(30px 50px 30px 50px);
+    }
+}
+
+/* ===================================
+   UTILIDADES COMUNES
+   =================================== */
+.bmo-text-center {
+    text-align: center;
+}
+
+/* ===================================
+   PANTALLA DE TAREAS
+   =================================== */
+.tasks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-bottom: 100px;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 25px;
+    
+    background-color: #c6e1d0;
+    border: 4px solid #000;
+    border-radius: 18px;
+    
+    font-size: 3rem;    
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        inset 4px 4px 0 rgba(255, 255, 255, 0.4),
+        inset -4px -4px 0 rgba(0, 0, 0, 0.3),
+        4px 4px 0 rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.task.common-task {
+    flex-direction: column;
+}
+
+.common-task-title {
+    font-size: 2rem!important;
+}
+
+.task:hover:not(.completed) {
+    transform: translate(-2px, -2px);
+    box-shadow: 
+        inset 4px 4px 0 rgba(255, 255, 255, 0.4),
+        inset -4px -4px 0 rgba(0, 0, 0, 0.3),
+        6px 6px 0 rgba(0, 0, 0, 0.5);
+}
+
+.task.completed {
+    background-color: #D0D0D0;
+    color: #888;
+    cursor: default;
+}
+
+.task.completed:hover {
+    transform: none;
+    box-shadow: 
+        inset 4px 4px 0 rgba(255, 255, 255, 0.4),
+        inset -4px -4px 0 rgba(0, 0, 0, 0.3),
+        4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.task > span:first-child {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.task > span:last-of-type {
+    font-size: 3rem;
+}
+
+.task-btn-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.task-btn-container.commons{
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.task-btn-container img {
+    height: 60px;
+    width: auto;
+    filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.3));
+}
+
+.points {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.points .btn-background {
+    background-image: url('/POINTS-ICON.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 8px 0px 8px 40px !important;
+    margin-left: 100px;
+    font-size: 2.5rem;
+    color: #000;
+    min-width: 150px;
+    text-align: center;
+}
+
+.bmo-text-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.bmo-hidden {
+    display: none !important;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom:30px;
+    margin-top:30px;
+    justify-content: space-between;
+}
+.bmo-header.visible {
+    display: flex;
+}
+
+.bmo-header-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.bmo-header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.nav-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.icon {
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    /* tamaño del icono dentro */
+    background: #1b4332;
+    color: white;
+    text-decoration: none;
+    padding-bottom: 1rem;
+    box-shadow:   -10px 0 0 0 black,
+                 10px 0 0 0 black,
+                 0 -10px 0 0 black,
+                 0 10px 0 0 black;
+}
+.icon.icon-card{
+    box-shadow: none;
+}
+
+.icon.reverse-card{
+   font-size: 6rem; 
+    background: transparent;
+    color: #1b4332;
+}
+
+.icon.close-card{
+   font-size: 6rem; 
+    background: transparent;
+    color: #1b4332;
+}
+
+.icon:active {
+    transform: scale(0.9);
+}
+.icon.active{
+    background:#ffd60a;
+    color:#111;
+}
+
+.filter-item{
+    opacity: 0.5;
+}
+
+.filter-item.active{
+    opacity: 1;
+}
+
+.confirm-button{
+    color: #000;
+    display: block;
+    width: 50%;
+    height: 35vh;
+    margin: 40px;
+    font-size: 4rem;
+    background-color: #c6e1d0;
+    border: 4px solid #000;
+    border-radius: 18px;
+}
+.confirm-description{
+    color: #000;
+    display: block;
+    font-size: 2rem;
+}
+
+.bmo-message{
+    color:black;
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size: 3rem;
+}
+
+.bmo-message h1{
+    margin-bottom:20px;
+}
+
+
+.loader-content {
+    text-align: center;
+    color: #000;
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+}
+
+.spinner {
+        width: 120px;
+    height: 120px;
+    border: 16px solid rgba(0,0,0);
+    border-top: 16px solid #c6e1d0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loader-text {
+    font-size: 3rem;
+    letter-spacing: 2px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

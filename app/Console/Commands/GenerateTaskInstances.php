@@ -103,8 +103,9 @@ class GenerateTaskInstances extends Command
             };
 
             $intervalHours = $unitsInHours / $schedule->times;
-            $hoursPassed = $completedDate->diffInHours($now);
-            $this->info("Tarea: {$task->name}, Horas desde última completada: {$hoursPassed}, Intervalo requerido: {$intervalHours}");
+            $endOfDay = $now->copy()->endOfDay();
+            $hoursPassed = $completedDate->diffInHours($endOfDay);
+            $this->info("Tarea: {$task->name}, Horas hasta fin de día: {$hoursPassed}, Intervalo requerido: {$intervalHours}");
             $shouldGenerate = $hoursPassed >= $intervalHours;
         }
 

@@ -71,10 +71,13 @@ class BMOSystem {
                 updateHeaderVisibility(screenName);
             }
 
-            // Si es la pantalla 'dni', rellena los datos del usuario
+            // Si es la pantalla 'dni', rellena los datos del usuario e inicia el flipper
             if (screenName === 'dni') {
                 if (typeof cardDNI !== 'undefined') {
                     cardDNI.init(bmo.selectedUser);
+                }
+                if (typeof cardDNIFlipper !== 'undefined') {
+                    cardDNIFlipper.init();
                 }
             }
         } else {

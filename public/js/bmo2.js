@@ -44,11 +44,11 @@ class BMOSystem {
 
     resetTimer() {
         clearTimeout(this.timeout);
-        // this.timeout = setTimeout(() => {
-        //     document.getElementById('screensaver').style.display = 'flex';
-        //     document.getElementById('bmo-content-container').style.display = 'none';
+        this.timeout = setTimeout(() => {
+            document.getElementById('screensaver').style.display = 'flex';
+            document.getElementById('bmo-content-container').style.display = 'none';
             
-        // }, 60000); // 60 segundos
+        }, 60000); // 60 segundos
     }
     /**
      * Carga una pantalla dinámicamente

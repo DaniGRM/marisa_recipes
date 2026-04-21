@@ -126,10 +126,10 @@
                     <div class="row justify-content-center align-items-center" style="width: 100%; height: 100%;">
                     @foreach([1, 2] as $userId)
                         @foreach($winningRooms[$userId] as $room)
-                        <div class="col-4 py-2">
+                        <div class="col-4 py-2" 
+                                id="queenRoom{{ $userId }}_{{ $room->id }}">
                             <img 
                                 style="height:70px"
-                                id="queenRoom{{ $userId }}_{{ $room->id }}"
                                 src="{{ $room->icon_path }}"
                                 alt="{{ $room->name }}"
                                 title="Gana en: {{ $room->name }}"

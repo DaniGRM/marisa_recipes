@@ -54,6 +54,22 @@ class BMOController extends Controller
         // El filtro actual es el que corresponde al currentUser (puede ser null si no hay currentUser)
         $currentFilter = $userFilters[$currentUser] ?? null;
 
+
+        $favoriteRooms = [];
+        foreach ([1, 2] as $userId) {
+            $favoriteRoomId = TaskInstance::where('completed_by', $userId)
+                ->where('status', 'completed')
+                ->with('task')
+                ->get()
+                ->groupBy(fn($ti) => $ti->task?->room_id)
+                ->filter(fn($group, $roomId) => !is_null($roomId))
+                ->map(fn($group) => $group->count())
+                ->sortDesc()
+                ->keys()
+                ->first();
+
+            $favoriteRooms[$userId] = $rooms->firstWhere('id', $favoriteRoomId);
+        }
         // Pasar el array de usuarios completo siempre, independientemente del currentUser
         return view('bmo2.index', compact(
             'tasks',
@@ -64,7 +80,8 @@ class BMOController extends Controller
             'taskCompleted', 
             'rooms', 
             'currentFilter',
-            'userFilters'  // Array con los filtros de ambos usuarios
+            'userFilters',  // Array con los filtros de ambos usuarios
+            'favoriteRooms'
         ));
     }
 

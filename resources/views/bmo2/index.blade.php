@@ -48,7 +48,8 @@
             currentScreen: null,
             currentFilter: '{{ $currentFilter }}',
             userFilters: {!! json_encode($userFilters) !!},
-            csrfToken: '{{ csrf_token() }}'
+            csrfToken: '{{ csrf_token() }}',
+            favoriteRooms: {!! json_encode($favoriteRooms) !!}
         };
     </script>
 

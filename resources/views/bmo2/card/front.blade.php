@@ -113,7 +113,7 @@
                 </span>
                 <span class="d-flex w-100 justify-content-center align-items-center"
                     style="font-size: 4rem; height: 90%;">
-                    5
+                    0
                 </span>
 
             </div>
@@ -123,7 +123,13 @@
                     REINA DE
                 </span>
                 <span class="d-flex w-100 justify-content-center align-items-center" style="height: 90%;">
-                    <img src="/icons/rooms/laundry.png" alt="Reina Icon" style="height: 100px; vertical-align: middle;">
+                    @foreach([1, 2] as $userId)
+                        @if(isset($favoriteRooms[$userId]))
+                            <img style="height: 100px; vertical-align: middle;" id="queenRoom{{ $userId }}" src="{{ $favoriteRooms[$userId]->icon }}" 
+                                alt="{{ $favoriteRooms[$userId]->name }}"
+                                title="Habitación favorita: {{ $favoriteRooms[$userId]->name }}">
+                        @endif
+                    @endforeach
                 </span>
             </div>
         </div>

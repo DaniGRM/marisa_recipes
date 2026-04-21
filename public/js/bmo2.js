@@ -216,12 +216,12 @@ class BMOSystem {
             if (imageScreen) imageScreen.style.display = 'none';
             if (textScreen) textScreen.style.display = 'block';
             this.launchConfetti();
-        }, 3000);
+        }, 1500);
 
         // Después de 6s → volver a app
         setTimeout(() => {
             this.loadScreen('tasks');
-        }, 6000);
+        }, 3000);
     }
 
     launchConfetti() {

@@ -17,7 +17,6 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    cursor: pointer;
 }
 
 /* Etiquetas comunes */
@@ -92,6 +91,5 @@
 
 /* El click en la tarjeta (excepto el botón close) */
 .bmo-dni-clickable {
-    cursor: pointer;
     user-select: none;
 }

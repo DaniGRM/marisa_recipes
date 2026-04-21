@@ -83,25 +83,19 @@ class CardDNI {
     }
 
     updateQueenRoomImage() {
-        const otherUserId = this.currentUser.id === 1 ? 2 : 1;
-        const otherRoomElement = document.querySelector(`#queenRoom${otherUserId}`);
-        if (otherRoomElement) {
-            otherRoomElement.style.display = 'none';
-        }
+        const userId = this.currentUser.id;
+        const rooms = bmo.winningRooms[userId] || [];
 
-        const queenRoomElement = document.querySelector(`#queenRoom${this.currentUser.id}`);
-        if (queenRoomElement) {
-            const favoriteRoom = bmo.favoriteRooms[this.currentUser.id];
-            if (favoriteRoom) {
-                queenRoomElement.src = favoriteRoom.icon_path;
-                queenRoomElement.alt = `Habitación favorita: ${favoriteRoom.name}`;
-                queenRoomElement.title = `Habitación favorita: ${favoriteRoom.name}`;
-                queenRoomElement.style.display = 'block';
-            } else {
-                queenRoomElement.style.display = 'none';
+        // ocultar todas primero
+        document.querySelectorAll(`[id^="queenRoom"]`)
+            .forEach(el => el.style.display = 'none');
+
+        rooms.forEach(room => {
+            const el = document.querySelector(`#queenRoom${userId}_${room.id}`);
+            if (el) {
+                el.style.display = 'block';
             }
-        }
-
+        });
     }
     /**
      * Actualiza un campo específico de la tarjeta

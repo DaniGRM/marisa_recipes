@@ -123,13 +123,21 @@
                     REINA DE
                 </span>
                 <span class="d-flex w-100 justify-content-center align-items-center" style="height: 90%;">
+                    <div class="row justify-content-center align-items-center" style="width: 100%; height: 100%;">
                     @foreach([1, 2] as $userId)
-                        @if(isset($favoriteRooms[$userId]))
-                            <img style="height: 100px; vertical-align: middle;" id="queenRoom{{ $userId }}" src="{{ $favoriteRooms[$userId]->icon }}" 
-                                alt="{{ $favoriteRooms[$userId]->name }}"
-                                title="Habitación favorita: {{ $favoriteRooms[$userId]->name }}">
-                        @endif
+                        @foreach($winningRooms[$userId] as $room)
+                        <div class="col-4 py-2">
+                            <img 
+                                style="height:70px"
+                                id="queenRoom{{ $userId }}_{{ $room->id }}"
+                                src="{{ $room->icon_path }}"
+                                alt="{{ $room->name }}"
+                                title="Gana en: {{ $room->name }}"
+                            >
+                        </div>
+                        @endforeach
                     @endforeach
+                    </div>
                 </span>
             </div>
         </div>

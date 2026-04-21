@@ -55,21 +55,7 @@ class BMOController extends Controller
         $currentFilter = $userFilters[$currentUser] ?? null;
 
 
-        $favoriteRooms = [];
-        foreach ([1, 2] as $userId) {
-            $favoriteRoomId = TaskInstance::where('completed_by', $userId)
-                ->where('status', 'completed')
-                ->with('task')
-                ->get()
-                ->groupBy(fn($ti) => $ti->task?->room_id)
-                ->filter(fn($group, $roomId) => !is_null($roomId))
-                ->map(fn($group) => $group->count())
-                ->sortDesc()
-                ->keys()
-                ->first();
-
-            $favoriteRooms[$userId] = $rooms->firstWhere('id', $favoriteRoomId);
-        }
+        $winningRooms = $this->getWinningRooms($rooms);
         // Pasar el array de usuarios completo siempre, independientemente del currentUser
         return view('bmo2.index', compact(
             'tasks',
@@ -81,7 +67,7 @@ class BMOController extends Controller
             'rooms', 
             'currentFilter',
             'userFilters',  // Array con los filtros de ambos usuarios
-            'favoriteRooms'
+            'winningRooms'
         ));
     }
 
@@ -111,5 +97,43 @@ class BMOController extends Controller
             'message' => 'Filtro guardado correctamente',
             'room' => $room
         ]);
+    }
+
+    private function getWinningRooms($rooms){
+        $roomsByUser = [];
+
+        foreach ([1, 2] as $userId) {
+            $roomsByUser[$userId] = TaskInstance::where('completed_by', $userId)
+                ->where('status', 'completed')
+                ->with('task')
+                ->get()
+                ->groupBy(fn($ti) => $ti->task?->room_id)
+                ->map(fn($group) => $group->count());
+        }
+
+        // Obtener todas las room_ids presentes
+        $allRoomIds = collect($roomsByUser[1])
+            ->keys()
+            ->merge($roomsByUser[2]->keys())
+            ->unique();
+
+        $winningRooms = [
+            1 => [],
+            2 => []
+        ];
+
+        foreach ($allRoomIds as $roomId) {
+            if (is_null($roomId)) continue;
+
+            $count1 = $roomsByUser[1][$roomId] ?? 0;
+            $count2 = $roomsByUser[2][$roomId] ?? 0;
+
+            if ($count1 > $count2) {
+                $winningRooms[1][] = $rooms->firstWhere('id', $roomId);
+            } elseif ($count2 > $count1) {
+                $winningRooms[2][] = $rooms->firstWhere('id', $roomId);
+            }
+        }
+        return $winningRooms;
     }
 }

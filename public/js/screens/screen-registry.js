@@ -27,7 +27,13 @@ const screenRegistry = {
     },
     dni: {
         showHeader: false
-    }
+    },
+    flash_moving: {
+        showHeader: false
+    },
+    flash_moving_confirm: {
+        showHeader: false
+    },
 };
 
 /**

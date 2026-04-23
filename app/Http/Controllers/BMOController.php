@@ -30,7 +30,9 @@ class BMOController extends Controller
             ->with(['monthlyPoints' => function ($q) use ($now) {
                 $q->where('year', $now->year)
                 ->where('month', $now->month);
-            }])->get();
+            }])
+            ->with(['flashMoving'])
+            ->get();
         
         $today = now()->toDateString();
 
@@ -56,6 +58,8 @@ class BMOController extends Controller
 
 
         $winningRooms = $this->getWinningRooms($rooms);
+
+        
         // Pasar el array de usuarios completo siempre, independientemente del currentUser
         return view('bmo2.index', compact(
             'tasks',
@@ -134,6 +138,7 @@ class BMOController extends Controller
                 $winningRooms[2][] = $rooms->firstWhere('id', $roomId);
             }
         }
+
         return $winningRooms;
     }
 }

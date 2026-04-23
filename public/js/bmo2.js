@@ -43,12 +43,12 @@ class BMOSystem {
     }
 
     resetTimer() {
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-            document.getElementById('screensaver').style.display = 'flex';
-            document.getElementById('bmo-content-container').style.display = 'none';
+        // clearTimeout(this.timeout);
+        // this.timeout = setTimeout(() => {
+        //     document.getElementById('screensaver').style.display = 'flex';
+        //     document.getElementById('bmo-content-container').style.display = 'none';
             
-        }, 60000); // 60 segundos
+        // }, 60000); // 60 segundos
     }
     /**
      * Carga una pantalla dinámicamente
@@ -58,6 +58,11 @@ class BMOSystem {
         // Oculta pantalla actual
         if (this.currentScreen) {
             document.querySelector('.bmo-screen.active')?.classList.remove('active');
+            
+            // Limpiar el flipper si salimos de la pantalla dni
+            if (this.currentScreen === 'dni' && typeof cardDNIFlipper !== 'undefined') {
+                cardDNIFlipper.destroy();
+            }
         }
 
         // Muestra nueva pantalla

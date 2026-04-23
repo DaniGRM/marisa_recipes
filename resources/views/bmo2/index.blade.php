@@ -33,6 +33,8 @@
                 @include('bmo2.screens.loader')
                 @include('bmo2.screens.task-completed')
                 @include('bmo2.screens.dni')
+                @include('bmo2.screens.events.flash_moving')
+                @include('bmo2.screens.events.flash_moving_confirm')
             </div>
         </div>
         @include('bmo2.screens.screensaver')

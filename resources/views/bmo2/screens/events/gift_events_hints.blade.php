@@ -27,7 +27,7 @@
         </div>
     @endforeach
     <span style="font-size: 2rem; margin-bottom: 20px;">Por <span id="giftPoints">30</span> puntos</span>
-    <button id="completeGift">He acertado</button>
+    <button class="confirm-button" style="width:90%; height: 150px; font-size: 3rem;" id="completeGift">He acertado</button>
     <div class="bmo-dni-close" style="right: 62px;top: 53px;">
             <img src="/card/cross.png" alt="Close Icon" onclick="bmoApp.loadScreen('tasks')">
         </div>

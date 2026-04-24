@@ -27,7 +27,13 @@ const screenRegistry = {
     },
     dni: {
         showHeader: false
-    }
+    },
+    gift_events: {
+        showHeader: false
+    },
+    gift_events_hints: {
+        showHeader: false
+    },
 };
 
 /**

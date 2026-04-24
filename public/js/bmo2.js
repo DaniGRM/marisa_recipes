@@ -111,7 +111,11 @@ class BMOSystem {
         } else {
             filterManager.clearFilterUI();
         }
-        
+        if(id == 2){
+            document.querySelector('.gift-icon').style.display = 'block';
+        }else{
+            document.querySelector('.gift-icon').style.display = 'none';
+        }
         this.loadScreen('tasks');
         this.updateUserIcon();
     }

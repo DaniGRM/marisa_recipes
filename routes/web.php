@@ -49,4 +49,8 @@ Route::prefix('bmo')->name('bmo.')->group(function () {
     Route::post('/filter', [BMOController::class,'saveFilter'])
         ->name('filter.save');
 
+    Route::get('/gift/{giftId}/complete', [\App\Http\Controllers\GiftEventsController::class,'complete'])
+        ->name('gift.complete');
+    Route::post('/gift/{giftId}/hint/{type}', [\App\Http\Controllers\GiftEventsController::class,'useHint'])
+        ->name('gift.use_hint');
 });

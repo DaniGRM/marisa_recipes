@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>BMO - Sistema de Tareas</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -33,6 +34,8 @@
                 @include('bmo2.screens.loader')
                 @include('bmo2.screens.task-completed')
                 @include('bmo2.screens.dni')
+                @include('bmo2.screens.events.gift_events')
+                @include('bmo2.screens.events.gift_events_hints')
             </div>
         </div>
         @include('bmo2.screens.screensaver')
@@ -56,7 +59,8 @@
     <!-- Librerías externas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
     <!-- Scripts del proyecto -->
     <script src="{{ asset('js/screens/screen-registry.js') }}"></script>
     <script src="{{ asset('js/screens/card-dni.js') }}"></script>

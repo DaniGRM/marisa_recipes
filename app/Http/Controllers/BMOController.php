@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\GiftEvent;
+use App\Models\UserGiftEvent;
 use App\Models\Room;
 
 class BMOController extends Controller
@@ -56,6 +58,22 @@ class BMOController extends Controller
 
 
         $winningRooms = $this->getWinningRooms($rooms);
+
+
+        $userGifts = UserGiftEvent::with('giftEvent')->get()->keyBy('gift_event_id');
+        
+        $gifts = GiftEvent::all();
+
+        $giftData = [];
+        foreach($gifts as $gift){
+            $data = $gift->toArray();
+            $giftData[$gift->id] = $data;
+        }
+
+        foreach($userGifts as $userGift){
+            $data = $userGift->toArray();
+            $giftData[$userGift->gift_event_id] = $data;
+        }
         // Pasar el array de usuarios completo siempre, independientemente del currentUser
         return view('bmo2.index', compact(
             'tasks',
@@ -67,7 +85,8 @@ class BMOController extends Controller
             'rooms', 
             'currentFilter',
             'userFilters',  // Array con los filtros de ambos usuarios
-            'winningRooms'
+            'winningRooms',
+            'giftData'
         ));
     }
 

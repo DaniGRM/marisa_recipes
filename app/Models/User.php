@@ -33,11 +33,20 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    protected $appends = ['current_month_points', 'current_month_tasks'];
+    protected $appends = ['current_month_points', 'current_month_tasks', 'flash_moving_points', 'flash_moving_boxes'];
 
     public function getCurrentMonthPointsAttribute()
     {
         return $this->monthlyPoints->first()->points ?? 0;
+    }
+
+    public function getFlashMovingPointsAttribute()
+    {
+        return $this->flashMoving->points ?? 0;
+    }
+    public function getFlashMovingBoxesAttribute()
+    {
+        return $this->flashMoving->boxes ?? 0;
     }
 
     public function getCurrentMonthTasksAttribute()
@@ -66,6 +75,11 @@ class User extends Authenticatable
     public function monthlyPoints()
     {
         return $this->hasMany(UserMonthlyPoint::class);
+    }
+
+    public function flashMoving()
+    {
+        return $this->hasOne(FlashMoving::class);
     }
     public function taskInstances()
     {
@@ -96,6 +110,20 @@ class User extends Authenticatable
         );
 
         $monthlyPoints->increment('points', $points);
+    }
+
+    public function addFlashMovingPoints(int $points)
+    {
+
+        $flashMoving = $this->flashMoving()->firstOrCreate(
+            ['user_id' => $this->id],
+            ['points' => 0, 'boxes' => 0]
+        );
+
+        $flashMoving->increment('points', $points);
+        $flashMoving->increment('boxes', 1);
+
+        $this->addPoints($points);
     }
 
     public function completedTasksInMonth(?int $month = null, ?int $year = null): int

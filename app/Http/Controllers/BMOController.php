@@ -30,7 +30,9 @@ class BMOController extends Controller
             ->with(['monthlyPoints' => function ($q) use ($now) {
                 $q->where('year', $now->year)
                 ->where('month', $now->month);
-            }])->get();
+            }])
+            ->with(['flashMoving'])
+            ->get();
         
         $today = now()->toDateString();
 
@@ -56,6 +58,8 @@ class BMOController extends Controller
 
 
         $winningRooms = $this->getWinningRooms($rooms);
+        $currentScreen = session('bmo_current_screen', null);
+        
         // Pasar el array de usuarios completo siempre, independientemente del currentUser
         return view('bmo2.index', compact(
             'tasks',
@@ -67,8 +71,15 @@ class BMOController extends Controller
             'rooms', 
             'currentFilter',
             'userFilters',  // Array con los filtros de ambos usuarios
-            'winningRooms'
+            'winningRooms',
+            'currentScreen'
         ));
+    }
+
+    public function saveScreen(Request $request)
+    {
+        session(['bmo_current_screen' => $request->input('screen')]);
+        return response()->json(['ok' => true]);
     }
 
     /**
@@ -134,6 +145,7 @@ class BMOController extends Controller
                 $winningRooms[2][] = $rooms->firstWhere('id', $roomId);
             }
         }
+
         return $winningRooms;
     }
 }

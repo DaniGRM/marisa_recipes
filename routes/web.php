@@ -8,6 +8,7 @@ use App\Http\Controllers\WeeklyPlanController;
 use App\Http\Controllers\UserSelectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskInstanceController;
+use App\Http\Controllers\EventController;
 
 Route::get('/select-user', [UserSelectController::class, 'index'])->name('user.select');
 Route::post('/select-user', [UserSelectController::class, 'login'])->name('user.login');
@@ -38,6 +39,7 @@ Route::middleware(['system.bmo','user.selected'])->group(function () {
     Route::post('/tasks/{task}/complete', [TaskInstanceController::class,'complete'])->name('tasks.complete');
     Route::post('/tasks/{task}/complete-common', [TaskInstanceController::class,'completeCommon'])->name('tasks.complete-cpmmon');
 
+
 });
 Route::prefix('bmo')->name('bmo.')->group(function () {
 
@@ -48,5 +50,9 @@ Route::prefix('bmo')->name('bmo.')->group(function () {
 
     Route::post('/filter', [BMOController::class,'saveFilter'])
         ->name('filter.save');
+
+    Route::post('/flash-moving/select-gift', [EventController::class, 'selectGift'])->name('flash_moving.select_gift');
+    Route::post('/save-screen', [BmoController::class, 'saveScreen']);
+
 
 });

@@ -58,7 +58,7 @@ class BMOController extends Controller
 
 
         $winningRooms = $this->getWinningRooms($rooms);
-
+        $currentScreen = session('bmo_current_screen', null);
         
         // Pasar el array de usuarios completo siempre, independientemente del currentUser
         return view('bmo2.index', compact(
@@ -71,8 +71,15 @@ class BMOController extends Controller
             'rooms', 
             'currentFilter',
             'userFilters',  // Array con los filtros de ambos usuarios
-            'winningRooms'
+            'winningRooms',
+            'currentScreen'
         ));
+    }
+
+    public function saveScreen(Request $request)
+    {
+        session(['bmo_current_screen' => $request->input('screen')]);
+        return response()->json(['ok' => true]);
     }
 
     /**

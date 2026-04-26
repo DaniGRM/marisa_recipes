@@ -83,7 +83,15 @@
 
         const nameElement = present.querySelector('.name');
         nameElement.textContent = randomNum + 'pts';
-        nameElement.classList.add(range.class);
+        
+        // Si es 10, clase especial dorada; si no, la del rango
+        if (randomNum === 10) {
+            console.log('¡Jackpot! Número 10 asignado.');
+            nameElement.classList.add('range-jackpot');
+        } else {
+            console.log(`Número ${randomNum} asignado al regalo ${index + 1} (Rango: ${range.class})`);
+            nameElement.classList.add(range.class);
+        }
     });
 
     // Manejar click en cada regalo
@@ -109,7 +117,7 @@
                 // Después de 2 segundos más, mostrar la pantalla de confirmación
                 setTimeout(() => {
                     selectGift(selectedNumber);
-                }, 2000);
+                }, 3000);
             }, 1500); // 1.5 segundos de delay
         });
     });

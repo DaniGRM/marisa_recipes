@@ -51,7 +51,8 @@
             currentFilter: '{{ $currentFilter }}',
             userFilters: {!! json_encode($userFilters) !!},
             csrfToken: '{{ csrf_token() }}',
-            winningRooms: {!! json_encode($winningRooms) !!}
+            winningRooms: {!! json_encode($winningRooms) !!},
+            currentScreen: '{{ $currentScreen ?? null }}'
         };
     </script>
 

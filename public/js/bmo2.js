@@ -32,14 +32,21 @@ class BMOSystem {
 
         if (bmo.currentUser !== '0') {
             this.setUser(bmo.currentUser);
+            // Restaurar pantalla guardada si existe y es válida
+            const restorableScreens = ['tasks', 'common_tasks', 'filter', 'dni', 'flash_moving'];
+            if (bmo.currentScreen && restorableScreens.includes(bmo.currentScreen)) {
+                this.loadScreen(bmo.currentScreen);
+            } else {
+                this.loadScreen('select-user');
+            }
         }
 
         if (bmo.taskCompleted) {
             this.showTaskCompleted();
         }
 
-        
-        
+
+
     }
 
     resetTimer() {
@@ -47,7 +54,7 @@ class BMOSystem {
         // this.timeout = setTimeout(() => {
         //     document.getElementById('screensaver').style.display = 'flex';
         //     document.getElementById('bmo-content-container').style.display = 'none';
-            
+
         // }, 60000); // 60 segundos
     }
     /**
@@ -55,45 +62,52 @@ class BMOSystem {
      * @param {string} screenName - Nombre de la pantalla
      */
     loadScreen(screenName) {
-        // Oculta pantalla actual
         if (this.currentScreen) {
             document.querySelector('.bmo-screen.active')?.classList.remove('active');
-            
-            // Limpiar el flipper si salimos de la pantalla dni
             if (this.currentScreen === 'dni' && typeof cardDNIFlipper !== 'undefined') {
                 cardDNIFlipper.destroy();
             }
         }
 
-        // Muestra nueva pantalla
         const screenElement = document.querySelector(`[data-screen="${screenName}"]`);
         if (screenElement) {
             screenElement.classList.add('active');
             this.currentScreen = screenName;
-            
-            // Actualiza la visibilidad del header según la pantalla
+
             if (typeof updateHeaderVisibility === 'function') {
                 updateHeaderVisibility(screenName);
             }
 
-            // Si es la pantalla 'dni', rellena los datos del usuario e inicia el flipper
             if (screenName === 'dni') {
-                if (typeof cardDNI !== 'undefined') {
-                    cardDNI.init(bmo.selectedUser);
-                }
-                if (typeof cardDNIFlipper !== 'undefined') {
-                    cardDNIFlipper.init();
-                }
+                if (typeof cardDNI !== 'undefined') cardDNI.init(bmo.selectedUser);
+                if (typeof cardDNIFlipper !== 'undefined') cardDNIFlipper.init();
+            }
+
+            // Guardar pantalla en sesión (solo si hay usuario y la pantalla es persistible)
+            const persistableScreens = ['tasks', 'common_tasks', 'filter', 'dni', 'flash_moving'];
+            if (bmo.selectedUser && persistableScreens.includes(screenName)) {
+                this._saveScreenToSession(screenName);
             }
         } else {
             console.error(`Pantalla "${screenName}" no encontrada`);
         }
 
-        if(screenName == 'screensaver'){
+        if (screenName === 'screensaver') {
             document.getElementById('bmo-content-container').style.display = 'none';
-        }else{
-            document.getElementById('bmo-content-container').style.display = 'block'    ;
+        } else {
+            document.getElementById('bmo-content-container').style.display = 'block';
         }
+    }
+
+    _saveScreenToSession(screenName) {
+        fetch('/bmo/save-screen', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': bmo.csrfToken,
+            },
+            body: JSON.stringify({ screen: screenName }),
+        }).catch(() => { }); // silencia errores de red
     }
 
     registerScreen(name, screenClass) {
@@ -101,27 +115,27 @@ class BMOSystem {
     }
 
     setUser(id) {
-    
+
         bmo.selectedUser = id;
-        
+
         // Obtener el filtro del usuario seleccionado desde el array de filtros
         const userFilter = bmo.userFilters[id] || null;
-        
+
         // Inicializar el filtro manager con el filtro de ese usuario
         filterManager.init(userFilter);
-        
+
         // Si hay un filtro guardado para este usuario, aplicarlo
         if (userFilter) {
             filterManager.applyFilterUI(userFilter);
         } else {
             filterManager.clearFilterUI();
         }
-        
+
         this.loadScreen('tasks');
         this.updateUserIcon();
     }
 
-    
+
 
     showLoader() {
         const text = document.querySelector('.loader-text');
@@ -131,7 +145,7 @@ class BMOSystem {
     }
 
 
-    updateUserIcon(){
+    updateUserIcon() {
         const userIconImgs = document.querySelectorAll('.current-user-icon');
 
         if (userIconImgs.length === 0) return;
@@ -147,19 +161,19 @@ class BMOSystem {
         });
     }
 
-    setFilterRoom(room){
+    setFilterRoom(room) {
         console.log("Filtrando por habitación:", room);
-        
+
         // Usar filterManager para manejar el filtro
         filterManager.toggleFilter(room, bmo.selectedUser);
-        
+
         // Actualizar la UI según el nuevo estado del filtro
         if (filterManager.currentFilter) {
             filterManager.applyFilterUI(filterManager.currentFilter);
         } else {
             filterManager.clearFilterUI();
         }
-        
+
         // Actualizar la referencia local del filtro
         this.filterRoom = filterManager.currentFilter;
     }
@@ -181,20 +195,20 @@ class BMOSystem {
         const user = document.getElementById('user' + taskId);
         let form = document.getElementById('formTask' + taskId);
 
-        if(isCommon == 'true'){
+        if (isCommon == 'true') {
             form = document.getElementById('formCommonTask' + taskId);
         }
         user.value = bmo.selectedUser;
         form.submit();
     }
 
-    cancelCompleteTask(){
+    cancelCompleteTask() {
         const btn = document.getElementById('confirmTaskBtn');
         let isCommon = btn.dataset['common'];
         console.log("Cancelando tarea. Es común?", isCommon);
-        if(isCommon == 'true'){
+        if (isCommon == 'true') {
             this.loadScreen('common_tasks');
-        }else{
+        } else {
             this.loadScreen('tasks');
         }
     }
@@ -205,7 +219,7 @@ class BMOSystem {
         // Actualizar datos dinámicos
         const nameElement = document.getElementById('completedTaskName');
         const pointsElement = document.getElementById('completedTaskPoints');
-        
+
         if (nameElement) nameElement.textContent = bmo.taskCompleted.task.name;
         if (pointsElement) pointsElement.textContent = bmo.taskCompleted.task.points;
 
@@ -274,13 +288,13 @@ document.getElementById('screensaver').addEventListener('click', (e) => {
     e.preventDefault();  // evita acciones por defecto si hubiera
     location.reload();
 });
-document.addEventListener('click', function(e){
-    if(!screensaver.contains(e.target)){
+document.addEventListener('click', function (e) {
+    if (!screensaver.contains(e.target)) {
         bmoApp.resetTimer();
     }
 });
-document.addEventListener('touchstart', function(e){
-    if(!screensaver.contains(e.target)){
+document.addEventListener('touchstart', function (e) {
+    if (!screensaver.contains(e.target)) {
         bmoApp.resetTimer();
     }
 });

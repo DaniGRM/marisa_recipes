@@ -5,7 +5,7 @@
 
         @foreach($tasks as $task)
 
-            <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}" @if($task->status ==='pending') onclick='bmoApp.completeTaskConfirm({{ $task->task->id }}, "{{ $task->task->description }}", false)' @endif data-room="{{ $task->task->room->name ?? '' }}">
+            <div class="task {{ $task->status === 'completed' ? 'completed' : '' }}" @if($task->status ==='pending') onclick='bmoApp.completeTaskConfirm({{ $task->task->id }}, {{ json_encode($task->task->description) }}, false)' @endif data-room="{{ $task->task->room->name ?? '' }}">
 
                 <span>
                     {{ $task->task->name }}

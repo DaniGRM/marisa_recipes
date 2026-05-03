@@ -4,7 +4,7 @@
 
         @foreach($commonTasks as $task)
             <div class="col-6 pt-3">
-            <div class="task common-task" onclick="bmoApp.completeTaskConfirm({{ $task->id }}, '{{ $task->description }}', true)"  data-room="{{ $task->room->name ?? '' }}">
+            <div class="task common-task" onclick='bmoApp.completeTaskConfirm({{ $task->id }}, "{{ $task->description }}", true)'  data-room="{{ $task->room->name ?? '' }}">
 
                 <span class="common-task-title">
                     {{ $task->name }}

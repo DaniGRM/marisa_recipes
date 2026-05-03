@@ -33,6 +33,7 @@
                 @include('bmo2.screens.loader')
                 @include('bmo2.screens.task-completed')
                 @include('bmo2.screens.dni')
+                @include('bmo2.screens.roulette')
                 @include('bmo2.screens.events.flash_moving')
                 @include('bmo2.screens.events.flash_moving_confirm')
             </div>
@@ -65,6 +66,7 @@
     <script src="{{ asset('js/screens/card-dni.js') }}"></script>
     <script src="{{ asset('js/screens/card-dni-flipper.js') }}"></script>
     <script src="{{ asset('js/screens/filter-manager.js') }}"></script>
+    <script src="{{ asset('js/screens/roulette.js') }}"></script>
     <script src="{{ asset('js/bmo2.js') }}"></script>
 </body>
 

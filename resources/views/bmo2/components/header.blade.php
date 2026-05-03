@@ -1,6 +1,8 @@
 <div class="header bmo-header">
 
     <div class="title">
+        <img class="roulette-icon" src="/icons/header/RULE-ICON-01.png" alt="" style="height: 120px" onclick="bmoApp.loadScreen('roulette')">
+
         <img class="filterIcon" alt="" style="display:none; width: 100px; height: 100px;">
         </img>
     </div>

@@ -77,10 +77,15 @@ class BMOSystem {
             if (typeof updateHeaderVisibility === 'function') {
                 updateHeaderVisibility(screenName);
             }
-
-            if (screenName === 'dni') {
-                if (typeof cardDNI !== 'undefined') cardDNI.init(bmo.selectedUser);
-                if (typeof cardDNIFlipper !== 'undefined') cardDNIFlipper.init();
+            switch (screenName) {
+                case 'dni':
+                    if (typeof cardDNI !== 'undefined') cardDNI.init(bmo.selectedUser);
+                    if (typeof cardDNIFlipper !== 'undefined') cardDNIFlipper.init();
+                    break;
+                case 'roulette':
+                    if (screenName === 'roulette') {
+                        rouletteScreen.init();
+                    }
             }
 
             // Guardar pantalla en sesión (solo si hay usuario y la pantalla es persistible)

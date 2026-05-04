@@ -42,7 +42,7 @@ class BMOController extends Controller
             ->orWhere('status','pending')
             ->get()
             ->sortBy([
-                fn($a, $b) => strcmp($a->status, $b->status),
+                fn($a, $b) => strcmp($b->status, $a->status),
                 fn($a, $b) => $b->total_points <=> $a->total_points,
             ])
             ->values();

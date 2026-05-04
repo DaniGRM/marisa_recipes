@@ -265,6 +265,7 @@ body {
 
 .points .btn-background.level2{
     background-image: url('/POINTS-ICON-2.png')!important;
+    color: #fff;
 }
 
 .points .btn-background.level3{

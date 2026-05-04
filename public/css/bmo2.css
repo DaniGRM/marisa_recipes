@@ -259,6 +259,17 @@ body {
     text-align: center;
 }
 
+.points .btn-background.level1{
+    background-image: url('/POINTS-ICON-1.png')!important;
+}
+
+.points .btn-background.level2{
+    background-image: url('/POINTS-ICON-2.png')!important;
+}
+
+.points .btn-background.level3{
+    background-image: url('/POINTS-ICON-3.png')!important;
+}
 .bmo-text-uppercase {
     text-transform: uppercase;
     letter-spacing: 2px;

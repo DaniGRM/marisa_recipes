@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Artisan;
 
 class Task extends Model
 {
@@ -14,6 +15,13 @@ class Task extends Model
         'room_id',
         'stackable',
     ];
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            Artisan::call('tasks:generate');
+        });
+    }
 
     public function schedule()
     {

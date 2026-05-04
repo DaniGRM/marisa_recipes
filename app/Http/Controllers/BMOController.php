@@ -40,12 +40,16 @@ class BMOController extends Controller
             ->where('date', $today)
             ->orWhereDate('completed_at', $today)
             ->orWhere('status','pending')
-            ->orderBy('status', 'asc')
-            ->get();
+            ->get()
+            ->sortBy([
+                fn($a, $b) => strcmp($a->status, $b->status),
+                fn($a, $b) => $b->total_points <=> $a->total_points,
+            ])
+            ->values();
         $commonTasks = Task::where('type', 'common')->get();
         $totalPoints = $tasks
             ->where('status','completed')
-            ->sum(fn($t) => $t->task->points);
+            ->sum(fn($t) => $t->total_points);
         $rooms = Room::all();
 
         // Obtener el filtro de cada usuario desde la sesión

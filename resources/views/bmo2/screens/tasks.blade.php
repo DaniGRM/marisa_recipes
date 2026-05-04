@@ -25,7 +25,7 @@
                 <div class="task-btn-container">
                     <img src="{{ $task->task->room->icon_path }}" alt="" style="height: 100px">
                     <div class="points d-flex">
-                        <span class="px-3 btn-background"> {{ $task->task->points }}</span>
+                        <span class="px-3 btn-background level{{ $task->bonus_level != 0 ? $task->bonus_level : '' }}"> {{ $task->task->points + $task->bonus }}</span>
                     </div>
                 </div>
                 

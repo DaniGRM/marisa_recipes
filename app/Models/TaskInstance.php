@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class TaskInstance extends Model
@@ -10,6 +11,8 @@ class TaskInstance extends Model
         'task_id',
         'date',
         'status',
+        'bonus',
+        'bonus_level',
         'completed_by',
         'completed_at'
     ];
@@ -59,8 +62,9 @@ class TaskInstance extends Model
             }
 
             // Sumar puntos
-            $user->increment('points', $task->points);
-            $user->addPoints($task->points);
+            $totalPoints = $task->points + ($taskInstance->bonus ?? 0);
+            $user->increment('points', $totalPoints);
+            $user->addPoints($totalPoints);
         });
     }
     public function task()
@@ -71,5 +75,12 @@ class TaskInstance extends Model
     public function completedBy()
     {
         return $this->belongsTo(User::class, 'completed_by');
+    }
+
+    public function totalPoints(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => ($this->task?->points ?? 0) + ($this->bonus ?? 0),
+        );
     }
 }

@@ -221,8 +221,10 @@ class BMOSystem {
         const pointsElement = document.getElementById('completedTaskPoints');
 
         if (nameElement) nameElement.textContent = bmo.taskCompleted.task.name;
-        if (pointsElement) pointsElement.textContent = bmo.taskCompleted.task.points;
-
+        const bonus = bmo.taskCompleted.bonus ?? 0;
+        const totalPoints = bmo.taskCompleted.task.points + (bonus > 0 ? bonus : 0);
+        if (pointsElement) pointsElement.textContent = totalPoints;
+        
         const imageScreen = document.querySelector('[data-screen="task-completed"] .task-completed-image-screen');
         const textScreen = document.querySelector('[data-screen="task-completed"] .task-completed-text-screen');
 

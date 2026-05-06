@@ -26,6 +26,20 @@ class TaskInstance extends Model
     {
         static::saving(function ($taskInstance) {
 
+            // Manejar rechazo: restar puntos cuando se rechaza una tarea completada
+            if ($taskInstance->status === 'rejected' && $taskInstance->exists) {
+                $originalStatus = $taskInstance->getOriginal('status');
+                if ($originalStatus === 'completed') {
+                    $task = $taskInstance->task;
+                    $user = \App\Models\User::find($taskInstance->completed_by);
+                    if ($task && $user) {
+                        $totalPoints = $task->points + ($taskInstance->bonus ?? 0);
+                        $user->subtractPoints($totalPoints);
+                    }
+                }
+                return;
+            }
+
             // Solo si se marca como completed
             if ($taskInstance->status !== 'completed') {
                 return;

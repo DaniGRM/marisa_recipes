@@ -22,6 +22,7 @@
         
         <!-- Contenedor de contenido escalable -->
         <div id="bmo-content-container" class="bmo-content-container">
+            @include('bmo2.components.header')
             <div id="bmo-content" class="bmo-content h-100">
                 <!-- Las pantallas se cargarán aquí dinámicamente -->
                 
@@ -30,6 +31,7 @@
                 @include('bmo2.screens.user-select')
                 @include('bmo2.screens.filter')
                 @include('bmo2.screens.confirm')
+                @include('bmo2.screens.reject-confirm')
                 @include('bmo2.screens.loader')
                 @include('bmo2.screens.task-completed')
                 @include('bmo2.screens.dni')

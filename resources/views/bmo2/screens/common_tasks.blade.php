@@ -1,9 +1,8 @@
 <div class="bmo-screen" data-screen="common_tasks">
-    @include('bmo2.components.header')
     <div class="row " style="padding-bottom: 100px;">
 
         @foreach($commonTasks as $task)
-            <div class="col-6 pt-3" data-room="{{ $task->room->name ?? '' }}">
+            <div class="col-6 pt-3" data-room="{{ $task->room->name ?? '' }}" style="--i: {{ $loop->index }}">
             <div class="task common-task" onclick='bmoApp.completeTaskConfirm({{ $task->id }}, {{ json_encode($task->description) }}, true)'  >
 
                 <span class="common-task-title">

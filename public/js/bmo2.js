@@ -213,6 +213,25 @@ class BMOSystem {
         }
     }
 
+    rejectTaskConfirm(instanceId, taskDescription = '') {
+        this.loadScreen('reject-confirm');
+        const btn = document.getElementById('rejectInstanceBtn');
+        btn.dataset['instance'] = instanceId;
+        const message = document.getElementById('rejectTaskDescription');
+        message.textContent = taskDescription || '';
+    }
+
+    rejectTask() {
+        this.showLoader();
+        const btn = document.getElementById('rejectInstanceBtn');
+        const instanceId = btn.dataset['instance'];
+        document.getElementById('formRejectInstance' + instanceId).submit();
+    }
+
+    cancelRejectTask() {
+        this.loadScreen('tasks');
+    }
+
     showTaskCompleted() {
         this.loadScreen('task-completed');
 

@@ -22,6 +22,9 @@ const screenRegistry = {
     confirm: {
         showHeader: false
     },
+    'reject-confirm': {
+        showHeader: false
+    },
     loader: {
         showHeader: false
     },

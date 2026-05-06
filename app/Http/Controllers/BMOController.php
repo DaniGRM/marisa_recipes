@@ -35,16 +35,25 @@ class BMOController extends Controller
             ->get();
         
         $today = now()->toDateString();
+        $twoDaysAgo = Carbon::now()->subDays(2)->startOfDay();
 
-        $tasks = TaskInstance::with('task')
-            ->where('date', $today)
-            ->orWhereDate('completed_at', $today)
-            ->orWhere('status','pending')
+        $tasks = TaskInstance::with(['task.room', 'completedBy'])
+            ->where(function ($q) use ($twoDaysAgo) {
+                $q->whereIn('status', ['pending', 'rejected'])
+                  ->orWhere(function ($q2) use ($twoDaysAgo) {
+                      $q2->where('status', 'completed')
+                         ->where('completed_at', '>=', $twoDaysAgo);
+                  });
+            })
             ->get()
-            ->sortBy([
-                fn($a, $b) => strcmp($b->status, $a->status),
-                fn($a, $b) => $b->total_points <=> $a->total_points,
-            ])
+            ->sort(function ($a, $b) {
+                $orderA = $this->statusOrder($a->status);
+                $orderB = $this->statusOrder($b->status);
+                if ($orderA !== $orderB) {
+                    return $orderA <=> $orderB;
+                }
+                return $b->total_points <=> $a->total_points;
+            })
             ->values();
         $commonTasks = Task::where('type', 'common')->get();
         $totalPoints = $tasks
@@ -112,6 +121,28 @@ class BMOController extends Controller
             'message' => 'Filtro guardado correctamente',
             'room' => $room
         ]);
+    }
+
+    private function statusOrder(string $status): int
+    {
+        return match ($status) {
+            'rejected'  => 0,
+            'pending'   => 1,
+            'completed' => 2,
+            default     => 3,
+        };
+    }
+
+    public function rejectTask(Request $request, TaskInstance $instance)
+    {
+        if ($instance->status !== 'completed') {
+            return redirect()->route('bmo.bmo');
+        }
+
+        $instance->status = 'rejected';
+        $instance->save();
+
+        return redirect()->route('bmo.bmo');
     }
 
     private function getWinningRooms($rooms){

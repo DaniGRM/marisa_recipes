@@ -112,6 +112,22 @@ class User extends Authenticatable
         $monthlyPoints->increment('points', $points);
     }
 
+    public function subtractPoints(int $points)
+    {
+        $this->points = max(0, $this->points - $points);
+        $this->save();
+
+        $month = now()->month;
+        $year  = now()->year;
+
+        $monthlyPoints = $this->monthlyPoints()->firstOrCreate(
+            ['year' => $year, 'month' => $month],
+            ['points' => 0]
+        );
+
+        $monthlyPoints->decrement('points', $points);
+    }
+
     public function addFlashMovingPoints(int $points)
     {
 

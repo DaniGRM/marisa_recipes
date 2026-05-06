@@ -34,7 +34,8 @@ class TaskInstanceController extends Controller
     public function complete(Request $request, Task $task)
     {
         $instance = TaskInstance::where('task_id',$task->id)
-            ->where('status','pending')
+            ->whereIn('status', ['pending', 'rejected'])
+            ->orderByRaw("FIELD(status, 'pending', 'rejected')")
             ->first();
         if(isset($request['user'])){
             $userId = $request['user'];

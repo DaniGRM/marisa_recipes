@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'user.selected' => \App\Http\Middleware\EnsureUserSelected::class,
             'system.bmo' => \App\Http\Middleware\CheckIfBMO::class,
+            'track.activity' => \App\Http\Middleware\TrackActivity::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

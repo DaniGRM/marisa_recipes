@@ -36,6 +36,7 @@ class TaskInstanceController extends Controller
         $instance = TaskInstance::where('task_id',$task->id)
             ->whereIn('status', ['pending', 'rejected'])
             ->orderByRaw("FIELD(status, 'pending', 'rejected')")
+            ->orderBy('bonus', 'desc')
             ->first();
         if(isset($request['user'])){
             $userId = $request['user'];

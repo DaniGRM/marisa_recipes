@@ -87,34 +87,30 @@ html { box-sizing: border-box; }
 .back  { transform: translateZ(-100px) rotateY(180deg) rotateX(0); }
 .right { transform: translateX(50%) rotateY(90deg); }
 
-.front, .left, .back, .right,
-.lid-top, .lid-front, .lid-left, .lid-back, .lid-right {
-    &:after {
-        background-color: #dbad4147;
-        border-left: 2px solid #000;
-        border-right: 2px solid #000;
-        content: '';
-        height: 100%;
-        left: calc(50% - 10px);
-        position: absolute;
-        transform: translateZ(.1px);
-        width: 20px;
-    }
+.front::after, .left::after, .back::after, .right::after,
+.lid-top::after, .lid-front::after, .lid-left::after, .lid-back::after, .lid-right::after {
+    background-color: #dbad4147;
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    content: '';
+    height: 100%;
+    left: calc(50% - 10px);
+    position: absolute;
+    transform: translateZ(.1px);
+    width: 20px;
 }
 
-.lid-top {
-    &:before {
-        background-color: #bb9d58;
-        border-top: 2px solid #000;
-        border-bottom: 2px solid #000;
-        content: '';
-        height: 20px;
-        left: 0;
-        position: absolute;
-        top: calc(50% - 10px);
-        transform: translateZ(.1px);
-        width: 100%;
-    }
+.lid-top::before {
+    background-color: #bb9d58;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    content: '';
+    height: 20px;
+    left: 0;
+    position: absolute;
+    top: calc(50% - 10px);
+    transform: translateZ(.1px);
+    width: 100%;
 }
 
 .lid {
@@ -174,15 +170,13 @@ html { box-sizing: border-box; }
     transform: translate3d(0, -40px, -10px) rotateX(10deg);
 }
 
-.present.open {
-    .name      { transform: scale(1.5); }
-    .instruction { opacity: 0; }
-    .left  { transform: translateX(-50%) rotateY(-90deg) rotateX(-90deg); }
-    .back  { transform: translateZ(-100px) rotateY(180deg) rotateX(-90deg); }
-    .right { transform: translateX(50%) rotateY(90deg) rotateX(-90deg); }
-    .front { transform: translateZ(100px) rotateX(-90deg); }
-    .lid   { animation: none; transform: translate3d(0, -120px, -120px) rotateX(50deg); }
-}
+.present.open .name      { transform: scale(1.5); }
+.present.open .instruction { opacity: 0; }
+.present.open .left  { transform: translateX(-50%) rotateY(-90deg) rotateX(-90deg); }
+.present.open .back  { transform: translateZ(-100px) rotateY(180deg) rotateX(-90deg); }
+.present.open .right { transform: translateX(50%) rotateY(90deg) rotateX(-90deg); }
+.present.open .front { transform: translateZ(100px) rotateX(-90deg); }
+.present.open .lid   { animation: none; transform: translate3d(0, -120px, -120px) rotateX(50deg); }
 
 canvas {
     height: 100%; width: 100%;

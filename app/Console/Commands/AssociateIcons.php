@@ -19,6 +19,9 @@ class AssociateIcons extends Command
             'Dormitorio' => 'icons/rooms/bed.png',
             'Galería' => 'icons/rooms/laundry.png',
             'Mascotas' => 'icons/rooms/pets.png',
+            'Estudio' => 'icons/rooms/study.png',
+            'Storage' => 'icons/rooms/storage.png',
+            'Patio' => 'icons/rooms/patio.png',
         ];
 
         $rooms = Room::all();

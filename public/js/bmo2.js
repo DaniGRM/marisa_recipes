@@ -202,7 +202,7 @@ class BMOSystem {
             document.getElementById('bmo-content-container').style.display = 'none';
             this.startScreensaverVideo();
 
-        }, 1200000); // 20 minutos
+        }, 60000); // 1 minuto
     }
     /**
      * Carga una pantalla dinámicamente

@@ -9,8 +9,8 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('tasks:generate')->dailyAt('00:01')->withoutOverlapping();
-        $schedule->command('tasks:calculate-bonus')->dailyAt('01:00')->withoutOverlapping();
+        $schedule->command('tasks:generate')->everyTwoHours()->withoutOverlapping();
+        $schedule->command('tasks:calculate-bonus')->everyTwoHours()->withoutOverlapping();
     }
 
     protected function commands(): void

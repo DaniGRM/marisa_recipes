@@ -8,8 +8,17 @@ class BMOSystem {
         this.currentScreen = null;
         this.filterRoom = null;
         this.screens = {};
-        this.init();
-        this.timeout = null
+        this.timeout = null;
+        this.screensaverVideo = null;
+        this.screensaverVideoSource = null;
+        this.screensaverVideoOriginalSrc = null;
+        this.screensaverVideoStopTimeout = null;
+        this.screensaverVideoRetryTimeout = null;
+        this.screensaverVideoRetryCount = 0;
+        this.screensaverVideoStoppedByTimer = false;
+        this.screensaverVideoStopAfterMs = 10000;
+        this.screensaverVideoMaxRetries = 5;
+        this.screensaverVideoRetryDelayMs = 1500;
         this.messages = [
             "Procesando...",
             "Cocinando magia...",
@@ -18,17 +27,13 @@ class BMOSystem {
             "Ole la limpieza :O",
             "Puntitos, puntitos ricos"
         ];
+        this.init();
     }
 
     init() {
         // Aquí cargarán las pantallas
         this.loadScreen('select-user'); // Pantalla inicial
-        const video = document.getElementById('bmoVideo');
-
-        // Esperar a que el vídeo tenga datos suficientes
-        video.addEventListener('canplaythrough', function () {
-            video.play().catch(() => { });
-        });
+        this.initScreensaverVideo();
 
         if (bmo.currentUser !== '0') {
             this.setUser(bmo.currentUser);
@@ -49,13 +54,122 @@ class BMOSystem {
 
     }
 
+    initScreensaverVideo() {
+        this.screensaverVideo = document.getElementById('bmoVideo');
+        if (!this.screensaverVideo) return;
+
+        this.screensaverVideoSource = this.screensaverVideo.querySelector('source');
+        this.screensaverVideoOriginalSrc = this.screensaverVideoSource
+            ? this.screensaverVideoSource.getAttribute('src')
+            : null;
+
+        this.screensaverVideo.addEventListener('playing', () => {
+            this.screensaverVideoRetryCount = 0;
+            this.clearScreensaverVideoRetryTimeout();
+            this.scheduleScreensaverVideoStop();
+        });
+
+        this.screensaverVideo.addEventListener('error', () => {
+            this.scheduleScreensaverVideoRetry();
+        });
+
+        this.screensaverVideo.addEventListener('stalled', () => {
+            this.scheduleScreensaverVideoRetry();
+        });
+
+        this.screensaverVideo.addEventListener('abort', () => {
+            this.scheduleScreensaverVideoRetry();
+        });
+
+        // Si el salvapantallas ya está visible al cargar, intentamos reproducir.
+        const screensaver = document.getElementById('screensaver');
+        if (screensaver && screensaver.style.display !== 'none') {
+            this.startScreensaverVideo();
+        }
+    }
+
+    clearScreensaverVideoStopTimeout() {
+        if (this.screensaverVideoStopTimeout) {
+            clearTimeout(this.screensaverVideoStopTimeout);
+            this.screensaverVideoStopTimeout = null;
+        }
+    }
+
+    clearScreensaverVideoRetryTimeout() {
+        if (this.screensaverVideoRetryTimeout) {
+            clearTimeout(this.screensaverVideoRetryTimeout);
+            this.screensaverVideoRetryTimeout = null;
+        }
+    }
+
+    scheduleScreensaverVideoStop() {
+        this.clearScreensaverVideoStopTimeout();
+
+        if (!Number.isFinite(this.screensaverVideoStopAfterMs) || this.screensaverVideoStopAfterMs <= 0) {
+            return;
+        }
+
+        this.screensaverVideoStopTimeout = setTimeout(() => {
+            if (!this.screensaverVideo) return;
+
+            this.screensaverVideoStoppedByTimer = true;
+            this.screensaverVideo.pause();
+        }, this.screensaverVideoStopAfterMs);
+    }
+
+    refreshScreensaverVideoSource() {
+        if (!this.screensaverVideoSource || !this.screensaverVideoOriginalSrc) return;
+
+        const separator = this.screensaverVideoOriginalSrc.includes('?') ? '&' : '?';
+        const refreshedSrc = `${this.screensaverVideoOriginalSrc}${separator}retry=${Date.now()}`;
+        this.screensaverVideoSource.setAttribute('src', refreshedSrc);
+    }
+
+    startScreensaverVideo() {
+        if (!this.screensaverVideo) return;
+
+        this.screensaverVideoStoppedByTimer = false;
+        this.clearScreensaverVideoRetryTimeout();
+
+        const playPromise = this.screensaverVideo.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+            playPromise.catch(() => {
+                this.scheduleScreensaverVideoRetry();
+            });
+        }
+    }
+
+    scheduleScreensaverVideoRetry() {
+        if (!this.screensaverVideo || this.screensaverVideoStoppedByTimer) {
+            return;
+        }
+
+        if (this.screensaverVideoRetryCount >= this.screensaverVideoMaxRetries) {
+            return;
+        }
+
+        this.screensaverVideoRetryCount += 1;
+        this.clearScreensaverVideoRetryTimeout();
+
+        this.screensaverVideoRetryTimeout = setTimeout(() => {
+            if (!this.screensaverVideo || this.screensaverVideoStoppedByTimer) {
+                return;
+            }
+
+            this.refreshScreensaverVideoSource();
+            this.screensaverVideo.load();
+            this.startScreensaverVideo();
+        }, this.screensaverVideoRetryDelayMs);
+    }
+
     resetTimer() {
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
             document.getElementById('screensaver').style.display = 'flex';
             document.getElementById('bmo-content-container').style.display = 'none';
+            this.startScreensaverVideo();
 
-        }, 60000); // 60 segundos
+        }, 10000); // 60 segundos
     }
     /**
      * Carga una pantalla dinámicamente
@@ -94,6 +208,7 @@ class BMOSystem {
 
         if (screenName === 'screensaver') {
             document.getElementById('bmo-content-container').style.display = 'none';
+            this.startScreensaverVideo();
         } else {
             document.getElementById('bmo-content-container').style.display = 'block';
         }

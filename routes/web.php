@@ -51,7 +51,7 @@ Route::prefix('bmo')->name('bmo.')->group(function () {
     Route::post('/filter', [BMOController::class,'saveFilter'])
         ->name('filter.save');
 
-    Route::post('/flash-moving/select-gift', [EventController::class, 'selectGift'])->name('flash_moving.select_gift');
+    // Route::post('/flash-moving/select-gift', [EventController::class, 'selectGift'])->name('flash_moving.select_gift');
     Route::post('/save-screen', [BmoController::class, 'saveScreen']);
     Route::post('/task-instances/{instance}/reject', [BMOController::class, 'rejectTask'])->name('task_instances.reject');
 

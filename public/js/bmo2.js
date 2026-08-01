@@ -16,7 +16,8 @@ class BMOSystem {
         this.screensaverVideoRetryTimeout = null;
         this.screensaverVideoRetryCount = 0;
         this.screensaverVideoStoppedByTimer = false;
-        this.screensaverVideoStopAfterMs = 10000;
+        this.screensaverVideoHiddenByTimer = false;
+        this.screensaverVideoStopAfterMs = 1200000;
         this.screensaverVideoMaxRetries = 5;
         this.screensaverVideoRetryDelayMs = 1500;
         this.messages = [
@@ -113,8 +114,39 @@ class BMOSystem {
             if (!this.screensaverVideo) return;
 
             this.screensaverVideoStoppedByTimer = true;
-            this.screensaverVideo.pause();
+            this.stopAndHideScreensaverVideo();
         }, this.screensaverVideoStopAfterMs);
+    }
+
+    stopAndHideScreensaverVideo() {
+        if (!this.screensaverVideo) return;
+
+        this.clearScreensaverVideoRetryTimeout();
+        this.clearScreensaverVideoStopTimeout();
+
+        this.screensaverVideo.pause();
+        this.screensaverVideo.style.display = 'none';
+
+        // Descarga el recurso para evitar actividad residual del reproductor.
+        if (this.screensaverVideoSource) {
+            this.screensaverVideoSource.setAttribute('src', '');
+            this.screensaverVideo.load();
+        }
+
+        this.screensaverVideoHiddenByTimer = true;
+    }
+
+    restoreScreensaverVideoIfHidden() {
+        if (!this.screensaverVideo || !this.screensaverVideoHiddenByTimer) return;
+
+        this.screensaverVideo.style.display = '';
+
+        if (this.screensaverVideoSource && this.screensaverVideoOriginalSrc) {
+            this.screensaverVideoSource.setAttribute('src', this.screensaverVideoOriginalSrc);
+            this.screensaverVideo.load();
+        }
+
+        this.screensaverVideoHiddenByTimer = false;
     }
 
     refreshScreensaverVideoSource() {
@@ -129,6 +161,7 @@ class BMOSystem {
         if (!this.screensaverVideo) return;
 
         this.screensaverVideoStoppedByTimer = false;
+        this.restoreScreensaverVideoIfHidden();
         this.clearScreensaverVideoRetryTimeout();
 
         const playPromise = this.screensaverVideo.play();
@@ -169,7 +202,7 @@ class BMOSystem {
             document.getElementById('bmo-content-container').style.display = 'none';
             this.startScreensaverVideo();
 
-        }, 10000); // 60 segundos
+        }, 1200000); // 20 minutos
     }
     /**
      * Carga una pantalla dinámicamente

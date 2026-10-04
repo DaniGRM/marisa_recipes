@@ -6,6 +6,8 @@
     </div>
 
     <div class="nav-icons">
+
+        <img class="sortIcon" src="/icons/header/task-down.png" alt="" style="height: 120px" onclick="bmoApp.toggleSort()">
         <img class="current-user-icon" src="" alt="" style="height: 120px" onclick="bmoApp.loadScreen('dni')">
         {{-- <img src="/icons/header/flash_moving.png" alt="" style="height: 120px" onclick="bmoApp.loadScreen('flash_moving')"> --}}
         <img src="/icons/header/TASK-ICON.png" alt="" style="height: 120px" onclick="bmoApp.loadScreen('tasks')">

@@ -1,4 +1,4 @@
-<div class="bmo-screen" data-screen="task-completed" style="z-index: 9999">
+<div class="bmo-screen" data-screen="task-completed" style="z-index: 9999" onclick="bmoApp.skipTaskCompleted()">
     <div class="task-completed-container d-flex flex-column h-100">
         
         {{-- Pantalla imagen --}}

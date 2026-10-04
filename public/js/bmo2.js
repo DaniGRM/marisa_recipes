@@ -7,6 +7,7 @@ class BMOSystem {
     constructor() {
         this.currentScreen = null;
         this.filterRoom = null;
+        this.sortOrder = 'desc'; // 'asc' | 'desc'
         this.screens = {};
         this.timeout = null;
         this.screensaverVideo = null;
@@ -20,6 +21,7 @@ class BMOSystem {
         this.screensaverVideoStopAfterMs = 1200000;
         this.screensaverVideoMaxRetries = 5;
         this.screensaverVideoRetryDelayMs = 1500;
+        this.staggerStepMs = 70; // debe coincidir con el "0.07s" de la animación bmoSlideIn en bmo2.css
         this.messages = [
             "Procesando...",
             "Cocinando magia...",
@@ -235,6 +237,10 @@ class BMOSystem {
             if (bmo.selectedUser && persistableScreens.includes(screenName)) {
                 this._saveScreenToSession(screenName);
             }
+
+            if (screenName === 'tasks' || screenName === 'common_tasks') {
+                this.applySort();
+            }
         } else {
             console.error(`Pantalla "${screenName}" no encontrada`);
         }
@@ -306,6 +312,88 @@ class BMOSystem {
             } else {
                 userIconImg.src = ''; // Ningún usuario
             }
+        });
+    }
+
+    /**
+     * Alterna el orden de las tareas por puntos entre mayor a menor y menor a mayor
+     */
+    toggleSort() {
+        this.sortOrder = this.sortOrder === 'desc' ? 'asc' : 'desc';
+        this.applySort();
+    }
+
+    /**
+     * Reordena las tareas de la pantalla activa según this.sortOrder
+     */
+    applySort() {
+        let container;
+        if (this.currentScreen === 'tasks') {
+            container = document.querySelector('[data-screen="tasks"] .tasks');
+        } else if (this.currentScreen === 'common_tasks') {
+            container = document.querySelector('[data-screen="common_tasks"] .row');
+        } else {
+            this.updateSortIcon();
+            return;
+        }
+
+        if (!container) {
+            this.updateSortIcon();
+            return;
+        }
+
+        const items = Array.from(container.children);
+        if (items.length === 0) {
+            this.updateSortIcon();
+            return;
+        }
+
+        const getPoints = (item) => {
+            const pointsEl = item.querySelector('.points .btn-background');
+            return pointsEl ? (parseInt(pointsEl.textContent.trim(), 10) || 0) : 0;
+        };
+        const getOriginalIndex = (item) => parseInt(item.style.getPropertyValue('--i'), 10) || 0;
+
+        items.sort((a, b) => {
+            const diff = this.sortOrder === 'asc' ? getPoints(a) - getPoints(b) : getPoints(b) - getPoints(a);
+            return diff !== 0 ? diff : getOriginalIndex(a) - getOriginalIndex(b);
+        });
+
+        items.forEach(item => container.appendChild(item));
+
+        this.applyStaggerAnimationDelays(container);
+        this.updateSortIcon();
+    }
+
+    /**
+     * Calcula el retraso de la animación de entrada solo para los elementos visibles,
+     * para que un filtro de habitación no retrase la aparición de las tareas mostradas
+     * por culpa de los huecos dejados por las tareas ocultas.
+     */
+    applyStaggerAnimationDelays(container) {
+        if (!container) return;
+
+        let visibleIndex = 0;
+        Array.from(container.children).forEach(item => {
+            if (item.style.display === 'none') {
+                item.style.removeProperty('animation-delay');
+                return;
+            }
+            item.style.animationDelay = `${(visibleIndex * this.staggerStepMs) / 1000}s`;
+            visibleIndex++;
+        });
+    }
+
+    /**
+     * Actualiza el ícono de ordenación en el header según el estado actual
+     */
+    updateSortIcon() {
+        const sortIconImgs = document.querySelectorAll('.sortIcon');
+        if (sortIconImgs.length === 0) return;
+
+        const icon = this.sortOrder === 'asc' ? '/icons/header/task-up.png' : '/icons/header/task-down.png';
+        sortIconImgs.forEach(img => {
+            img.src = icon;
         });
     }
 
@@ -391,7 +479,7 @@ class BMOSystem {
         const bonus = bmo.taskCompleted.bonus ?? 0;
         const totalPoints = bmo.taskCompleted.task.points + (bonus > 0 ? bonus : 0);
         if (pointsElement) pointsElement.textContent = totalPoints;
-        
+
         const imageScreen = document.querySelector('[data-screen="task-completed"] .task-completed-image-screen');
         const textScreen = document.querySelector('[data-screen="task-completed"] .task-completed-text-screen');
 
@@ -399,17 +487,51 @@ class BMOSystem {
         if (imageScreen) imageScreen.style.display = 'block';
         if (textScreen) textScreen.style.display = 'none';
 
-        // Después de 3s → texto y confetti
-        setTimeout(() => {
-            if (imageScreen) imageScreen.style.display = 'none';
-            if (textScreen) textScreen.style.display = 'block';
-            this.launchConfetti();
+        // Después de 1.5s → texto y confetti
+        this.taskCompletedTextTimeout = setTimeout(() => {
+            this.showTaskCompletedText();
         }, 1500);
+    }
 
-        // Después de 6s → volver a app
-        setTimeout(() => {
+    /**
+     * Pasa de la imagen a la fase de texto/confetti, y programa la vuelta a tareas
+     */
+    showTaskCompletedText() {
+        const imageScreen = document.querySelector('[data-screen="task-completed"] .task-completed-image-screen');
+        const textScreen = document.querySelector('[data-screen="task-completed"] .task-completed-text-screen');
+
+        if (imageScreen) imageScreen.style.display = 'none';
+        if (textScreen) textScreen.style.display = 'block';
+        this.launchConfetti();
+
+        // Después de 1.5s más → volver a app
+        this.taskCompletedReturnTimeout = setTimeout(() => {
             this.loadScreen('tasks');
-        }, 3000);
+        }, 1500);
+    }
+
+    /**
+     * Toca la pantalla para adelantar la fase actual: de imagen pasa a texto,
+     * y de texto pasa directamente a la lista de tareas
+     */
+    skipTaskCompleted() {
+        if (this.currentScreen !== 'task-completed') return;
+
+        const imageScreen = document.querySelector('[data-screen="task-completed"] .task-completed-image-screen');
+        const onImageStage = imageScreen && imageScreen.style.display !== 'none';
+
+        if (onImageStage) {
+            clearTimeout(this.taskCompletedTextTimeout);
+            this.showTaskCompletedText();
+            return;
+        }
+
+        clearTimeout(this.taskCompletedReturnTimeout);
+
+        const canvas = document.getElementById('confetti-canvas');
+        if (canvas) canvas.style.display = 'none';
+
+        this.loadScreen('tasks');
     }
 
     launchConfetti() {

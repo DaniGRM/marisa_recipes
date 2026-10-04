@@ -41,7 +41,7 @@ class BMOSystem {
         if (bmo.currentUser !== '0') {
             this.setUser(bmo.currentUser);
             // Restaurar pantalla guardada si existe y es válida
-            const restorableScreens = ['tasks', 'common_tasks', 'filter', 'dni', 'flash_moving'];
+            const restorableScreens = ['tasks', 'common_tasks', 'filter', 'dni', 'flash_moving', 'roulette'];
             if (bmo.currentScreen && restorableScreens.includes(bmo.currentScreen)) {
                 this.loadScreen(bmo.currentScreen);
             } else {
@@ -232,8 +232,12 @@ class BMOSystem {
                 if (typeof cardDNIFlipper !== 'undefined') cardDNIFlipper.init();
             }
 
+            if (screenName === 'roulette') {
+                if (typeof rouletteManager !== 'undefined') rouletteManager.init();
+            }
+
             // Guardar pantalla en sesión (solo si hay usuario y la pantalla es persistible)
-            const persistableScreens = ['tasks', 'common_tasks', 'filter', 'dni', 'flash_moving'];
+            const persistableScreens = ['tasks', 'common_tasks', 'filter', 'dni', 'flash_moving', 'roulette'];
             if (bmo.selectedUser && persistableScreens.includes(screenName)) {
                 this._saveScreenToSession(screenName);
             }
@@ -355,6 +359,13 @@ class BMOSystem {
         const getOriginalIndex = (item) => parseInt(item.style.getPropertyValue('--i'), 10) || 0;
 
         items.sort((a, b) => {
+            // Las tareas completadas quedan siempre al final, fuera del criterio de puntos
+            const aCompleted = a.classList.contains('completed');
+            const bCompleted = b.classList.contains('completed');
+            if (aCompleted !== bCompleted) {
+                return aCompleted ? 1 : -1;
+            }
+
             const diff = this.sortOrder === 'asc' ? getPoints(a) - getPoints(b) : getPoints(b) - getPoints(a);
             return diff !== 0 ? diff : getOriginalIndex(a) - getOriginalIndex(b);
         });
@@ -412,6 +423,10 @@ class BMOSystem {
 
         // Actualizar la referencia local del filtro
         this.filterRoom = filterManager.currentFilter;
+    }
+
+    spinRoulette() {
+        if (typeof rouletteManager !== 'undefined') rouletteManager.spin();
     }
 
     completeTaskConfirm(taskId, taskDescription = '', isCommon = false) {

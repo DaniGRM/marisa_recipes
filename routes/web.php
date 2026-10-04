@@ -9,6 +9,7 @@ use App\Http\Controllers\UserSelectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskInstanceController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PunishmentController;
 
 Route::get('/select-user', [UserSelectController::class, 'index'])->name('user.select');
 Route::post('/select-user', [UserSelectController::class, 'login'])->name('user.login');
@@ -34,6 +35,11 @@ Route::middleware(['system.bmo','user.selected'])->group(function () {
     Route::post('/tasks', [TaskController::class,'store'])->name('tasks.store');
     Route::put('/tasks/{task}', [TaskController::class,'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class,'destroy'])->name('tasks.destroy');
+
+    Route::get('/punishments', [PunishmentController::class,'index'])->name('punishments.index');
+    Route::post('/punishments', [PunishmentController::class,'store'])->name('punishments.store');
+    Route::put('/punishments/{punishment}', [PunishmentController::class,'update'])->name('punishments.update');
+    Route::delete('/punishments/{punishment}', [PunishmentController::class,'destroy'])->name('punishments.destroy');
 
     Route::get('/today', [TaskInstanceController::class,'today'])->name('tasks.today');
     Route::post('/tasks/{task}/complete', [TaskInstanceController::class,'complete'])->name('tasks.complete');

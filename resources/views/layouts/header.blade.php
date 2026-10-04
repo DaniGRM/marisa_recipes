@@ -17,6 +17,11 @@
                         Tareas
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('punishments*') ? 'active' : '' }}" href="/punishments">
+                        Castigos
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('weekly-plans*') ? 'active' : '' }}" href="/weekly-plans">

@@ -13,6 +13,9 @@
         <img src="/icons/header/TASK-ICON.png" alt="" style="height: 120px" onclick="bmoApp.loadScreen('tasks')">
         <img src="/icons/header/COMMUN-TASK-ICON.png" alt="" style="height: 120px" onclick="bmoApp.loadScreen('common_tasks')">
         <img src="/icons/header/FILTERS-ICON.png" alt="" style="height: 120px" onclick="bmoApp.loadScreen('filter')">
+        @if($isRouletteDay ?? false)
+            <img src="/icons/header/RULE-ICON-02.png" alt="" style="height: 120px;" onclick="bmoApp.loadScreen('roulette')">
+        @endif
         <img src="/icons/header/EXIT-ICON.png" alt="" style="height: 120px" onclick="location.reload()">
     </div>
 

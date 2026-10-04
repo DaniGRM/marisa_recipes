@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Room;
+use App\Models\Punishment;
 
 class BMOController extends Controller
 {
@@ -72,7 +73,11 @@ class BMOController extends Controller
 
         $winningRooms = $this->getWinningRooms($rooms);
         $currentScreen = session('bmo_current_screen', null);
-        
+        $punishments = Punishment::orderBy('name')->get();
+
+        // La ruleta de castigos solo está disponible el penúltimo día del mes
+        $isRouletteDay = $now->day === ($now->daysInMonth - 1);
+
         // Pasar el array de usuarios completo siempre, independientemente del currentUser
         return view('bmo2.index', compact(
             'tasks',
@@ -85,7 +90,9 @@ class BMOController extends Controller
             'currentFilter',
             'userFilters',  // Array con los filtros de ambos usuarios
             'winningRooms',
-            'currentScreen'
+            'currentScreen',
+            'punishments',
+            'isRouletteDay'
         ));
     }
 
